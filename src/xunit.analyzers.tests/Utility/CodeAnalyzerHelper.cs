@@ -69,10 +69,10 @@ static class CodeAnalyzerHelper
 				new PackageIdentity("Microsoft.Bcl.AsyncInterfaces", "6.0.0"),
 				new PackageIdentity("Microsoft.Extensions.Primitives", "6.0.0"),
 				new PackageIdentity("System.Threading.Tasks.Extensions", "4.5.4"),
-				new PackageIdentity("xunit.v3.assert", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.common", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.extensibility.core", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.runner.common", "4.0.0-pre.25")
+				new PackageIdentity("xunit.v3.assert", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.common", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.extensibility.core", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.runner.common", "4.0.0-pre.69")
 			)
 		);
 
@@ -81,8 +81,8 @@ static class CodeAnalyzerHelper
 				new PackageIdentity("Microsoft.Bcl.AsyncInterfaces", "6.0.0"),
 				new PackageIdentity("Microsoft.Extensions.Primitives", "6.0.0"),
 				new PackageIdentity("System.Threading.Tasks.Extensions", "4.5.4"),
-				new PackageIdentity("xunit.v3.common", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.runner.utility", "4.0.0-pre.25")
+				new PackageIdentity("xunit.v3.common", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.runner.utility", "4.0.0-pre.69")
 			)
 		);
 
@@ -93,10 +93,10 @@ static class CodeAnalyzerHelper
 				new PackageIdentity("Microsoft.Bcl.AsyncInterfaces", "6.0.0"),
 				new PackageIdentity("Microsoft.Extensions.Primitives", "6.0.0"),
 				new PackageIdentity("System.Threading.Tasks.Extensions", "4.5.4"),
-				new PackageIdentity("xunit.v3.assert.aot", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.common.aot", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.extensibility.core.aot", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.runner.common.aot", "4.0.0-pre.25")
+				new PackageIdentity("xunit.v3.assert.aot", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.common.aot", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.extensibility.core.aot", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.runner.common.aot", "4.0.0-pre.69")
 			)
 		);
 
@@ -105,8 +105,8 @@ static class CodeAnalyzerHelper
 				new PackageIdentity("Microsoft.Bcl.AsyncInterfaces", "6.0.0"),
 				new PackageIdentity("Microsoft.Extensions.Primitives", "6.0.0"),
 				new PackageIdentity("System.Threading.Tasks.Extensions", "4.5.4"),
-				new PackageIdentity("xunit.v3.common.aot", "4.0.0-pre.25"),
-				new PackageIdentity("xunit.v3.runner.utility.aot", "4.0.0-pre.25")
+				new PackageIdentity("xunit.v3.common.aot", "4.0.0-pre.69"),
+				new PackageIdentity("xunit.v3.runner.utility.aot", "4.0.0-pre.69")
 			)
 		);
 

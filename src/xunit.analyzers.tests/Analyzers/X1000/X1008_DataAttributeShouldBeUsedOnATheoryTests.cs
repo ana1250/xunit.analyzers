@@ -153,6 +153,7 @@ public class X1008_DataAttributeShouldBeUsedOnATheoryTests
 				public bool DisableDiscoveryEnumeration => throw new NotImplementedException();
 				public string? DisplayName => throw new NotImplementedException();
 				public bool Explicit => throw new NotImplementedException();
+				public bool IncludeTestCaseIndex => throw new NotImplementedException();
 				public string? Skip => throw new NotImplementedException();
 				public Type[]? SkipExceptions => throw new NotImplementedException();
 				public bool SkipTestWithoutData => throw new NotImplementedException();
