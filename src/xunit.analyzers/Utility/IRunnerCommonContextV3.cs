@@ -9,7 +9,7 @@ namespace Xunit.Analyzers;
 public interface IRunnerCommonContextV3
 {
 	/// <summary>
-	/// Gets a reference to type <c>IRunnerReport</c>, if available.
+	/// Gets a reference to type <c>IRunnerReporter</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? IRunnerReporterType { get; }
 

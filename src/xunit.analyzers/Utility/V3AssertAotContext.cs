@@ -4,34 +4,13 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3AssertAotContext : IAssertContextV3
+public class V3AssertAotContext : V3AssertContextBase
 {
-	readonly Lazy<INamedTypeSymbol?> lazyAssertType;
-
 	V3AssertAotContext(
 		Compilation compilation,
-		Version version)
-	{
-		Version = version;
-
-		lazyAssertType = new(() => TypeSymbolFactory.Assert(compilation));
-	}
-
-	/// <inheritdoc/>
-	public INamedTypeSymbol? AssertType =>
-		lazyAssertType.Value;
-
-	/// <inheritdoc/>
-	public bool SupportsAssertFail => true;
-
-	/// <inheritdoc/>
-	public bool SupportsAssertNullWithPointers => true;
-
-	/// <inheritdoc/>
-	public bool SupportsInexactTypeAssertions => true;
-
-	/// <inheritdoc/>
-	public Version Version { get; }
+		Version version) :
+			base(compilation, version)
+	{ }
 
 	public static IAssertContextV3? Get(
 		Compilation compilation,

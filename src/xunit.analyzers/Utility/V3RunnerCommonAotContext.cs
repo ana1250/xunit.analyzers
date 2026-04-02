@@ -4,25 +4,13 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3RunnerCommonAotContext : IRunnerCommonContextV3
+public class V3RunnerCommonAotContext : V3RunnerCommonContextBase
 {
-	readonly Lazy<INamedTypeSymbol?> lazyIRunnerReporterType;
-
 	V3RunnerCommonAotContext(
 		Compilation compilation,
-		Version version)
-	{
-		Version = version;
-
-		lazyIRunnerReporterType = new(() => TypeSymbolFactory.IRunnerReporter_V3(compilation));
-	}
-
-	/// <inheritdoc/>
-	public INamedTypeSymbol? IRunnerReporterType =>
-		lazyIRunnerReporterType.Value;
-
-	/// <inheritdoc/>
-	public Version Version { get; }
+		Version version) :
+			base(compilation, version)
+	{ }
 
 	public static IRunnerCommonContextV3? Get(
 		Compilation compilation,
