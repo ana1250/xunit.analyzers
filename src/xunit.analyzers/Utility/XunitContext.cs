@@ -38,7 +38,7 @@ public class XunitContext
 		V3RunnerUtility = V3RunnerUtilityAotContext.Get(compilation) ?? V3RunnerUtilityContext.Get(compilation);
 
 		displayName =
-			IsAot
+			HasV3AotReferences
 				? "v3 AOT (auto-detect)"
 				: HasV3References
 					? "v3 (auto-detect)"
@@ -86,12 +86,6 @@ public class XunitContext
 	}
 
 	/// <summary>
-	/// Gets a flag which indicates whether this test references the Native AOT packages.
-	/// </summary>
-	public bool IsAot =>
-		V3Assert is V3AssertAotContext || V3Core is V3CoreAotContext || V3RunnerUtility is V3RunnerUtilityAotContext;
-
-	/// <summary>
 	/// Gets a flag which indicates whether there are any xUnit.net v2 references in the project
 	/// (including abstractions, assert, core, execution, and runner utility references).
 	/// </summary>
@@ -100,10 +94,24 @@ public class XunitContext
 
 	/// <summary>
 	/// Gets a flag which indicates whether there are any xUnit.net v3 references in the project
-	/// (including assert, common, and core references).
+	/// (including assert, common, and core references), for Native AOT mode.
+	/// </summary>
+	public bool HasV3AotReferences =>
+		V3Assert is V3AssertAotContext || V3Common is V3CommonAotContext || V3Core is V3CoreAotContext || V3RunnerUtility is V3RunnerUtilityAotContext;
+
+	/// <summary>
+	/// Gets a flag which indicates whether there are any xUnit.net v3 references in the project
+	/// (including assert, common, and core references), for reflection mode.
+	/// </summary>
+	public bool HasV3NonAotReferences =>
+		V3Assert is V3AssertContext || V3Common is V3CommonContext || V3Core is V3CoreContext || V3RunnerUtility is V3RunnerUtilityContext;
+
+	/// <summary>
+	/// Gets a flag which indicates whether there are any xUnit.net v3 references in the project
+	/// (including assert, common, and core references), for either reflection or Native AOT mode.
 	/// </summary>
 	public bool HasV3References =>
-		V3Assert is not null || V3Common is not null || V3Core is not null;
+		V3Assert is not null || V3Common is not null || V3Core is not null || V3RunnerUtility is not null;
 
 	/// <summary>
 	/// Gets a combined view of features available to either v2 runners (linked against <c>xunit.runner.utility</c>)

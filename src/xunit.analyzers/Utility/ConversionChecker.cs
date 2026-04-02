@@ -59,7 +59,7 @@ static class ConversionChecker
 		}
 
 		// User-defined conversion not supported in AOT
-		if (xunitContext.IsAot && conversion.IsUserDefined)
+		if (xunitContext.HasV3AotReferences && conversion.IsUserDefined)
 			return false;
 
 		// Rules of last resort

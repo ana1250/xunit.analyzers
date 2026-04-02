@@ -25,7 +25,7 @@ public class TheoryDataTypeArgumentsShouldBeSerializable : XunitDiagnosticAnalyz
 		Guard.ArgumentNotNull(context);
 		Guard.ArgumentNotNull(xunitContext);
 
-		if (xunitContext.IsAot)
+		if (xunitContext.HasV3AotReferences)
 			return;
 
 		if (SerializableTypeSymbols.Create(context.Compilation, xunitContext) is not SerializableTypeSymbols typeSymbols)

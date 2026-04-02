@@ -36,7 +36,7 @@ public class DataAttributeShouldBeUsedOnATheory : XunitDiagnosticAnalyzer
 				return;
 
 			// For AOT, only the 4 sealed attribute types are supported
-			if (xunitContext.IsAot)
+			if (xunitContext.HasV3AotReferences)
 			{
 				if (!attributes.ContainsAttributeType(xunitContext.Core.FactAndTheoryAttributeTypes))
 					reportX1008();
