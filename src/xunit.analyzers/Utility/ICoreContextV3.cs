@@ -33,12 +33,42 @@ public interface ICoreContextV3 : ICoreContext
 	INamedTypeSymbol? IFactAttributeType { get; }
 
 	/// <summary>
+	/// Gets a reference to type <c>ITestClassOrderer</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? ITestClassOrdererType { get; }
+
+	/// <summary>
 	/// Gets a reference to type <c>ITestContextAccessor</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? ITestContextAccessorType { get; }
 
 	/// <summary>
+	/// Gets a reference to type <c>ITestMethodOrderer</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? ITestMethodOrdererType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>ITestPipelineStartup</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? ITestPipelineStartupType { get; }
+
+	/// <summary>
 	/// Gets a reference to type <c>JsonTypeIDAttribute</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? JsonTypeIDAttributeType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>TestClassOrdererAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? TestClassOrdererAttributeType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>TestMethodOrdererAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? TestMethodOrdererAttributeType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>TestPipelineStartupAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? TestPipelineStartupAttributeType { get; }
 }

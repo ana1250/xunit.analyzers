@@ -12,4 +12,9 @@ public interface ICommonContextV3 : ICommonContext
 	/// Gets a reference to type <c>IXunitSerializer</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? IXunitSerializerType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>RegisterXunitSerializerAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? RegisterXunitSerializerAttributeType { get; }
 }

@@ -25,17 +25,17 @@ public class XunitContext
 	/// inspect references</param>
 	public XunitContext(Compilation compilation)
 	{
-		V2Abstractions = V2AbstractionsContext.Get(compilation);
-		V2Assert = V2AssertContext.Get(compilation);
-		V2Core = V2CoreContext.Get(compilation);
-		V2Execution = V2ExecutionContext.Get(compilation);
-		V2RunnerUtility = V2RunnerUtilityContext.Get(compilation);
+		V2Abstractions = CommonContextV2.Get(compilation);
+		V2Assert = AssertContextV2.Get(compilation);
+		V2Core = CoreContextV2.Get(compilation);
+		V2Execution = ExecutionContextV2.Get(compilation);
+		V2RunnerUtility = RunnerUtilityContextV2.Get(compilation);
 
-		V3Assert = V3AssertAotContext.Get(compilation) ?? V3AssertContext.Get(compilation);
-		V3Common = V3CommonAotContext.Get(compilation) ?? V3CommonContext.Get(compilation);
-		V3Core = V3CoreAotContext.Get(compilation) ?? V3CoreContext.Get(compilation);
-		V3RunnerCommon = V3RunnerCommonAotContext.Get(compilation) ?? V3RunnerCommonContext.Get(compilation);
-		V3RunnerUtility = V3RunnerUtilityAotContext.Get(compilation) ?? V3RunnerUtilityContext.Get(compilation);
+		V3Assert = AssertContextV3Aot.Get(compilation) ?? AssertContextV3.Get(compilation);
+		V3Common = CommonContextV3Aot.Get(compilation) ?? CommonContextV3.Get(compilation);
+		V3Core = CoreContextV3Aot.Get(compilation) ?? CoreContextV3.Get(compilation);
+		V3RunnerCommon = RunnerCommonContextV3Aot.Get(compilation) ?? RunnerCommonContextV3.Get(compilation);
+		V3RunnerUtility = RunnerUtilityContextV3Aot.Get(compilation) ?? RunnerUtilityContextV3.Get(compilation);
 
 		displayName =
 			HasV3AotReferences
@@ -97,14 +97,14 @@ public class XunitContext
 	/// (including assert, common, and core references), for Native AOT mode.
 	/// </summary>
 	public bool HasV3AotReferences =>
-		V3Assert is V3AssertAotContext || V3Common is V3CommonAotContext || V3Core is V3CoreAotContext || V3RunnerUtility is V3RunnerUtilityAotContext;
+		V3Assert is AssertContextV3Aot || V3Common is CommonContextV3Aot || V3Core is CoreContextV3Aot || V3RunnerUtility is RunnerUtilityContextV3Aot;
 
 	/// <summary>
 	/// Gets a flag which indicates whether there are any xUnit.net v3 references in the project
 	/// (including assert, common, and core references), for reflection mode.
 	/// </summary>
 	public bool HasV3NonAotReferences =>
-		V3Assert is V3AssertContext || V3Common is V3CommonContext || V3Core is V3CoreContext || V3RunnerUtility is V3RunnerUtilityContext;
+		V3Assert is AssertContextV3 || V3Common is CommonContextV3 || V3Core is CoreContextV3 || V3RunnerUtility is RunnerUtilityContextV3;
 
 	/// <summary>
 	/// Gets a flag which indicates whether there are any xUnit.net v3 references in the project
@@ -130,31 +130,31 @@ public class XunitContext
 	/// Gets information about the reference to <c>xunit.abstractions</c> (v2). If the project does
 	/// not reference the v2 abstractions library, then returns <c>null</c>.
 	/// </summary>
-	public V2AbstractionsContext? V2Abstractions { get; private set; }
+	public CommonContextV2? V2Abstractions { get; private set; }
 
 	/// <summary>
 	/// Gets information about the reference to <c>xunit.assert</c> or <c>xunit.assert.source</c> (v2). If
 	/// the project does not reference the v2 assertion library, then returns <c>null</c>.
 	/// </summary>
-	public V2AssertContext? V2Assert { get; private set; }
+	public AssertContextV2? V2Assert { get; private set; }
 
 	/// <summary>
 	/// Gets information about the reference to <c>xunit.core</c>(v2). If the project does not
 	/// reference the v2 core library, then returns <c>null</c>.
 	/// </summary>
-	public V2CoreContext? V2Core { get; private set; }
+	public CoreContextV2? V2Core { get; private set; }
 
 	/// <summary>
 	/// Gets information about the reference to <c>xunit.execution</c> (v2). If the project does
 	/// not reference the v2 execution library, then returns <c>null</c>.
 	/// </summary>
-	public V2ExecutionContext? V2Execution { get; private set; }
+	public ExecutionContextV2? V2Execution { get; private set; }
 
 	/// <summary>
 	/// Gets information about the reference to <c>xunit.runner.utility</c> (v2). If the project does
 	/// not reference the v2 runner utility library, then returns <c>null</c>.
 	/// </summary>
-	public V2RunnerUtilityContext? V2RunnerUtility { get; private set; }
+	public RunnerUtilityContextV2? V2RunnerUtility { get; private set; }
 
 	/// <summary>
 	/// Gets information about the reference to <c>xunit.v3.assert</c>, <c>xunit.v3.assert.aot</c>,
@@ -203,8 +203,8 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v2")
 			{
-				V2Abstractions = V2AbstractionsContext.Get(compilation, v2AbstractionsVersion),
-				V2Core = V2CoreContext.Get(compilation, versionOverride),
+				V2Abstractions = CommonContextV2.Get(compilation, v2AbstractionsVersion),
+				V2Core = CoreContextV2.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -215,7 +215,7 @@ public class XunitContext
 	public static XunitContext ForV2Abstractions(Compilation compilation) =>
 		new("v2 (Abstractions)")
 		{
-			V2Abstractions = V2AbstractionsContext.Get(compilation, v2AbstractionsVersion),
+			V2Abstractions = CommonContextV2.Get(compilation, v2AbstractionsVersion),
 		};
 
 	/// <summary>
@@ -229,7 +229,7 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v2 (Assert)")
 			{
-				V2Assert = V2AssertContext.Get(compilation, versionOverride),
+				V2Assert = AssertContextV2.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -243,8 +243,8 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v2 (Execution)")
 			{
-				V2Abstractions = V2AbstractionsContext.Get(compilation, v2AbstractionsVersion),
-				V2Execution = V2ExecutionContext.Get(compilation, versionOverride),
+				V2Abstractions = CommonContextV2.Get(compilation, v2AbstractionsVersion),
+				V2Execution = ExecutionContextV2.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -258,8 +258,8 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v2 (Runner Utility)")
 			{
-				V2Abstractions = V2AbstractionsContext.Get(compilation, v2AbstractionsVersion),
-				V2RunnerUtility = V2RunnerUtilityContext.Get(compilation, versionOverride),
+				V2Abstractions = CommonContextV2.Get(compilation, v2AbstractionsVersion),
+				V2RunnerUtility = RunnerUtilityContextV2.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -274,10 +274,10 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v3")
 			{
-				V3Assert = V3AssertContext.Get(compilation, versionOverride),
-				V3Common = V3CommonContext.Get(compilation, versionOverride),
-				V3Core = V3CoreContext.Get(compilation, versionOverride),
-				V3RunnerCommon = V3RunnerCommonContext.Get(compilation, versionOverride),
+				V3Assert = AssertContextV3.Get(compilation, versionOverride),
+				V3Common = CommonContextV3.Get(compilation, versionOverride),
+				V3Core = CoreContextV3.Get(compilation, versionOverride),
+				V3RunnerCommon = RunnerCommonContextV3.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -292,10 +292,10 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v3 AOT")
 			{
-				V3Assert = V3AssertContext.Get(compilation, versionOverride),
-				V3Common = V3CommonContext.Get(compilation, versionOverride),
-				V3Core = V3CoreContext.Get(compilation, versionOverride),
-				V3RunnerCommon = V3RunnerCommonContext.Get(compilation, versionOverride),
+				V3Assert = AssertContextV3.Get(compilation, versionOverride),
+				V3Common = CommonContextV3.Get(compilation, versionOverride),
+				V3Core = CoreContextV3.Get(compilation, versionOverride),
+				V3RunnerCommon = RunnerCommonContextV3.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -309,7 +309,7 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v3 (Assert)")
 			{
-				V3Assert = V3AssertContext.Get(compilation, versionOverride),
+				V3Assert = AssertContextV3.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -323,7 +323,7 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v3 AOT (Assert)")
 			{
-				V3Assert = V3AssertAotContext.Get(compilation, versionOverride),
+				V3Assert = AssertContextV3Aot.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -337,7 +337,7 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v3 (Runner Utility)")
 			{
-				V3RunnerUtility = V3RunnerUtilityContext.Get(compilation, versionOverride),
+				V3RunnerUtility = RunnerUtilityContextV3.Get(compilation, versionOverride),
 			};
 
 	/// <summary>
@@ -351,7 +351,7 @@ public class XunitContext
 		Version? versionOverride = null) =>
 			new("v3 AOT (Runner Utility)")
 			{
-				V3RunnerUtility = V3RunnerUtilityAotContext.Get(compilation, versionOverride),
+				V3RunnerUtility = RunnerUtilityContextV3Aot.Get(compilation, versionOverride),
 			};
 
 	public override string ToString() =>

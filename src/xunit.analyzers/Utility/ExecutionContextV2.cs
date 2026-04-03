@@ -4,12 +4,12 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V2ExecutionContext
+public class ExecutionContextV2
 {
 	const string assemblyPrefix = "xunit.execution.";
 	readonly Lazy<INamedTypeSymbol?> lazyLongLivedMarshalByRefObjectType;
 
-	V2ExecutionContext(
+	ExecutionContextV2(
 		Compilation compilation,
 		string platform,
 		Version version)
@@ -37,7 +37,7 @@ public class V2ExecutionContext
 	/// </summary>
 	public Version Version { get; }
 
-	public static V2ExecutionContext? Get(
+	public static ExecutionContextV2? Get(
 		Compilation compilation,
 		Version? versionOverride = null)
 	{

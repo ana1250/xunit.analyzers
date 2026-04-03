@@ -51,6 +51,9 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? CollectionAttributeOfT_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.CollectionAttributeOfT_V3);
 
+	public static INamedTypeSymbol? CollectionBehaviorAttribute(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.CollectionBehaviorAttribute);
+
 	public static INamedTypeSymbol? CollectionDefinitionAttribute(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.CollectionDefinitionAttribute);
 
@@ -139,6 +142,9 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? IClassFixureOfT(Compilation compilation) =>
 		 Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IClassFixtureOfT);
 
+	public static INamedTypeSymbol? ICodeGenTestCollectionFactory_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ICodeGenTestCollectionFactory_V3);
+
 	public static INamedTypeSymbol? ICollection(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName("System.Collections.ICollection");
 
@@ -147,6 +153,12 @@ public static class TypeSymbolFactory
 
 	public static INamedTypeSymbol ICollectionOfT(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetSpecialType(SpecialType.System_Collections_Generic_ICollection_T);
+
+	public static INamedTypeSymbol? IConsoleResultWriter_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IConsoleResultWriter_V3);
+
+	public static INamedTypeSymbol? IMicrosoftTestingPlatformResultWriter_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IMicrosoftTestingPlatformResultWriter_V3);
 
 	public static INamedTypeSymbol? ICriticalNotifyCompletion(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName("System.Runtime.CompilerServices.ICriticalNotifyCompletion");
@@ -250,17 +262,32 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? ITestCase_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestCase_V3);
 
+	public static INamedTypeSymbol? ITestCaseOrderer_V2(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestCaseOrderer_V2);
+
+	public static INamedTypeSymbol? ITestCaseOrderer_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestCaseOrderer_V3);
+
 	public static INamedTypeSymbol? ITestClass_V2(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestClass_V2);
 
 	public static INamedTypeSymbol? ITestClass_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestClass_V3);
 
+	public static INamedTypeSymbol? ITestClassOrderer_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestClassOrderer_V3);
+
 	public static INamedTypeSymbol? ITestCollection_V2(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestCollection_V2);
 
 	public static INamedTypeSymbol? ITestCollection_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestCollection_V3);
+
+	public static INamedTypeSymbol? ITestCollectionOrderer_V2(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestCollectionOrderer_V2);
+
+	public static INamedTypeSymbol? ITestCollectionOrderer_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestCollectionOrderer_V3);
 
 	public static INamedTypeSymbol? ITestContextAccessor_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestContextAccessor_V3);
@@ -289,11 +316,17 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? ITestMethod_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestMethod_V3);
 
+	public static INamedTypeSymbol? ITestMethodOrderer_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestMethodOrderer_V3);
+
 	public static INamedTypeSymbol? ITestOutputHelper_V2(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestOutputHelper_V2);
 
 	public static INamedTypeSymbol? ITestOutputHelper_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestOutputHelper_V3);
+
+	public static INamedTypeSymbol? ITestPipelineStartup_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITestPipelineStartup_V3);
 
 	public static INamedTypeSymbol? ITheoryDataRow_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ITheoryDataRow_V3);
@@ -318,6 +351,12 @@ public static class TypeSymbolFactory
 
 	public static INamedTypeSymbol? IXunitSerializer_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IXunitSerializer_V3);
+
+	public static INamedTypeSymbol? IXunitTestCollectionFactory_V2(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IXunitTestCollectionFactory_V2);
+
+	public static INamedTypeSymbol? IXunitTestCollectionFactory_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IXunitTestCollectionFactory_V3);
 
 	public static INamedTypeSymbol? JsonTypeIDAttribute_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.JsonTypeIDAttribute_V3);
@@ -352,6 +391,18 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? Record(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.Record);
 
+	public static INamedTypeSymbol? RegisterConsoleResultWriterAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.RegisterConsoleResultWriterAttribute_V3);
+
+	public static INamedTypeSymbol? RegisterMicrosoftTestingPlatformResultWriterAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.RegisterMicrosoftTestingPlatformResultWriterAttribute_V3);
+
+	public static INamedTypeSymbol? RegisterResultWriterAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.RegisterResultWriterAttribute_V3);
+
+	public static INamedTypeSymbol? RegisterRunnerReporterAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.RegisterRunnerReporterAttribute_V3);
+
 	public static INamedTypeSymbol? RegisterXunitSerializerAttribute_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.RegisterXunitSerializerAttribute_V3);
 
@@ -370,8 +421,26 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? TaskOfT(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName("System.Threading.Tasks.Task`1");
 
+	public static INamedTypeSymbol? TestCaseOrdererAttribute(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TestCaseOrdererAttribute);
+
+	public static INamedTypeSymbol? TestClassOrdererAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TestClassOrdererAttribute_V3);
+
+	public static INamedTypeSymbol? TestCollectionOrdererAttribute(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TestCollectionOrdererAttribute);
+
 	public static INamedTypeSymbol? TestContext_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TestContext_V3);
+
+	public static INamedTypeSymbol? TestFrameworkAttribute(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TestFrameworkAttribute);
+
+	public static INamedTypeSymbol? TestMethodOrdererAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TestMethodOrdererAttribute_V3);
+
+	public static INamedTypeSymbol? TestPipelineStartupAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TestPipelineStartupAttribute_V3);
 
 	public static INamedTypeSymbol? TheoryAttribute(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.TheoryAttribute);

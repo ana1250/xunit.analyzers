@@ -4,15 +4,15 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3CommonAotContext : V3CommonContextBase
+public class AssertContextV3Aot : AssertContextV3Base
 {
-	V3CommonAotContext(
+	AssertContextV3Aot(
 		Compilation compilation,
 		Version version) :
 			base(compilation, version)
 	{ }
 
-	public static ICommonContextV3? Get(
+	public static IAssertContextV3? Get(
 		Compilation compilation,
 		Version? versionOverride = null)
 	{
@@ -22,9 +22,9 @@ public class V3CommonAotContext : V3CommonContextBase
 			versionOverride ??
 			compilation
 				.ReferencedAssemblyNames
-				.FirstOrDefault(a => a.Name.Equals("xunit.v3.common.aot", StringComparison.OrdinalIgnoreCase))
+				.FirstOrDefault(a => a.Name.Equals("xunit.v3.assert.aot", StringComparison.OrdinalIgnoreCase))
 				?.Version;
 
-		return version is null ? null : new V3CommonAotContext(compilation, version);
+		return version is null ? null : new AssertContextV3Aot(compilation, version);
 	}
 }

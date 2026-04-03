@@ -42,7 +42,14 @@ public static partial class Descriptors
 			"Class {0} extends FactAttribute. It should include a public constructor for source information."
 		);
 
-	// Placeholder for rule X3004
+	public static DiagnosticDescriptor X3004_TypeDoesNotImplementInterface { get; } =
+		Diagnostic(
+			"xUnit3004",
+			"The given type is missing a required interface implementation",
+			Extensibility,
+			Error,
+			"Class {0} must implement interface {1}"
+		);
 
 	// Placeholder for rule X3005
 

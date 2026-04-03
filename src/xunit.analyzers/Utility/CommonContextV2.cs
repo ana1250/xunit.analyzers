@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V2AbstractionsContext : ICommonContext
+public class CommonContextV2 : ICommonContext
 {
 	readonly Lazy<INamedTypeSymbol?> lazyIAssemblyInfoType;
 	readonly Lazy<INamedTypeSymbol?> lazyIAttributeInfoType;
@@ -26,7 +26,7 @@ public class V2AbstractionsContext : ICommonContext
 	readonly Lazy<INamedTypeSymbol?> lazyITypeInfoType;
 	readonly Lazy<INamedTypeSymbol?> lazyIXunitSerializableType;
 
-	V2AbstractionsContext(
+	CommonContextV2(
 		Compilation compilation,
 		Version version)
 	{
@@ -71,7 +71,6 @@ public class V2AbstractionsContext : ICommonContext
 	public INamedTypeSymbol? IMessageSinkMessageType =>
 		lazyIMessageSinkMessageType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? IMessageSinkType =>
 		lazyIMessageSinkType.Value;
 
@@ -97,39 +96,30 @@ public class V2AbstractionsContext : ICommonContext
 	public INamedTypeSymbol? ISourceInformationType =>
 		lazyISourceInformationType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestAssemblyType =>
 		lazyITestAssemblyType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestCaseType =>
 		lazyITestCaseType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestClassType =>
 		lazyITestClassType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestCollectionType =>
 		lazyITestCollectionType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestFrameworkDiscovererType =>
 		lazyITestFrameworkDiscovererType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestFrameworkExecutorType =>
 		lazyITestFrameworkExecutorType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestFrameworkType =>
 		lazyITestFrameworkType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestMethodType =>
 		lazyITestMethodType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestType =>
 		lazyITestType.Value;
 
@@ -139,16 +129,12 @@ public class V2AbstractionsContext : ICommonContext
 	public INamedTypeSymbol? ITypeInfoType =>
 		lazyITypeInfoType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? IXunitSerializableType =>
 		lazyIXunitSerializableType.Value;
 
-	/// <summary>
-	/// Gets the version number of the <c>xunit.abstractions</c> assembly.
-	/// </summary>
 	public Version Version { get; }
 
-	public static V2AbstractionsContext? Get(
+	public static CommonContextV2? Get(
 		Compilation compilation,
 		Version? versionOverride = null)
 	{

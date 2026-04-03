@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3AssertAotContext : V3AssertContextBase
+public class AssertContextV3 : AssertContextV3Base
 {
-	V3AssertAotContext(
+	AssertContextV3(
 		Compilation compilation,
 		Version version) :
 			base(compilation, version)
@@ -22,9 +22,9 @@ public class V3AssertAotContext : V3AssertContextBase
 			versionOverride ??
 			compilation
 				.ReferencedAssemblyNames
-				.FirstOrDefault(a => a.Name.Equals("xunit.v3.assert.aot", StringComparison.OrdinalIgnoreCase))
+				.FirstOrDefault(a => a.Name.Equals("xunit.v3.assert", StringComparison.OrdinalIgnoreCase) || a.Name.Equals("xunit.v3.assert.source", StringComparison.OrdinalIgnoreCase))
 				?.Version;
 
-		return version is null ? null : new V3AssertAotContext(compilation, version);
+		return version is null ? null : new AssertContextV3(compilation, version);
 	}
 }

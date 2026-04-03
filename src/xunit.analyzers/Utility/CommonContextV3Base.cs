@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3CommonContextBase : ICommonContextV3
+public class CommonContextV3Base : ICommonContextV3
 {
 	readonly Lazy<INamedTypeSymbol?> lazyIMessageSinkType;
 	readonly Lazy<INamedTypeSymbol?> lazyISourceInformationProviderType;
@@ -18,8 +18,9 @@ public class V3CommonContextBase : ICommonContextV3
 	readonly Lazy<INamedTypeSymbol?> lazyITestType;
 	readonly Lazy<INamedTypeSymbol?> lazyIXunitSerializableType;
 	readonly Lazy<INamedTypeSymbol?> lazyIXunitSerializerType;
+	readonly Lazy<INamedTypeSymbol?> lazyRegisterXunitSerializerAttributeType;
 
-	protected V3CommonContextBase(
+	protected CommonContextV3Base(
 		Compilation compilation,
 		Version version)
 	{
@@ -38,60 +39,50 @@ public class V3CommonContextBase : ICommonContextV3
 		lazyITestType = new(() => TypeSymbolFactory.ITest_V3(compilation));
 		lazyIXunitSerializableType = new(() => TypeSymbolFactory.IXunitSerializable_V3(compilation));
 		lazyIXunitSerializerType = new(() => TypeSymbolFactory.IXunitSerializer_V3(compilation));
+		lazyRegisterXunitSerializerAttributeType = new(() => TypeSymbolFactory.RegisterXunitSerializerAttribute_V3(compilation));
 	}
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? IMessageSinkType =>
 		lazyIMessageSinkType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ISourceInformationProviderType =>
 		lazyISourceInformationProviderType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestAssemblyType =>
 		lazyITestAssemblyType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestCaseType =>
 		lazyITestCaseType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestClassType =>
 		lazyITestClassType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestCollectionType =>
 		lazyITestCollectionType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestFrameworkDiscovererType =>
 		lazyITestFrameworkDiscovererType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestFrameworkExecutorType =>
 		lazyITestFrameworkExecutorType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestFrameworkType =>
 		lazyITestFrameworkType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestMethodType =>
 		lazyITestMethodType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? ITestType =>
 		lazyITestType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? IXunitSerializableType =>
 		lazyIXunitSerializableType.Value;
 
-	/// <inheritdoc/>
 	public INamedTypeSymbol? IXunitSerializerType =>
 		lazyIXunitSerializerType.Value;
 
-	/// <inheritdoc/>
+	public INamedTypeSymbol? RegisterXunitSerializerAttributeType =>
+		lazyRegisterXunitSerializerAttributeType.Value;
+
 	public Version Version { get; }
 }

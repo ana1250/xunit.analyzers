@@ -20,6 +20,11 @@ public interface ICoreContext
 	INamedTypeSymbol? CollectionAttributeType { get; }
 
 	/// <summary>
+	/// Gets a reference to type <c>CollectionBehaviorAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? CollectionBehaviorAttributeType { get; }
+
+	/// <summary>
 	/// Gets a reference to type <c>CollectionDefinitionAttribute</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? CollectionDefinitionAttributeType { get; }
@@ -60,6 +65,27 @@ public interface ICoreContext
 	INamedTypeSymbol? InlineDataAttributeType { get; }
 
 	/// <summary>
+	/// Gets a reference to type <c>ITestCaseOrderer</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? ITestCaseOrdererType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>IXunitTestCollectionFactory</c> (in reflection mode)
+	/// or <c>ICodeGenTestCollectionFactory</c> (in Native AOT mode)
+	/// </summary>
+	INamedTypeSymbol? ITestCollectionFactoryType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>ITestCollectionOrderer</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? ITestCollectionOrdererType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>ITestFramework</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? ITestFrameworkType { get; }
+
+	/// <summary>
 	/// Gets a reference to type <c>ITestOutputHelper</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? ITestOutputHelperType { get; }
@@ -68,6 +94,21 @@ public interface ICoreContext
 	/// Gets a reference to type <c>MemberDataAttribute</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? MemberDataAttributeType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>TestCaseOrdererAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? TestCaseOrdererAttributeType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>TestCollectionOrdererAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? TestCollectionOrdererAttributeType { get; }
+
+	/// <summary>
+	/// Gets a reference to type <c>TestFrameworkAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? TestFrameworkAttributeType { get; }
 
 	/// <summary>
 	/// Gets a reference to type <c>TheoryAttribute</c>, if available.

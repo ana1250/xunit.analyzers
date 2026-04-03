@@ -12,6 +12,8 @@ public class EmptyCoreContext : ICoreContext
 
 	public INamedTypeSymbol? CollectionAttributeType => null;
 
+	public INamedTypeSymbol? CollectionBehaviorAttributeType => null;
+
 	public INamedTypeSymbol? CollectionDefinitionAttributeType => null;
 
 	public INamedTypeSymbol? CulturedFactAttributeType => null;
@@ -28,11 +30,25 @@ public class EmptyCoreContext : ICoreContext
 
 	public INamedTypeSymbol? InlineDataAttributeType => null;
 
+	public INamedTypeSymbol? ITestCaseOrdererType => null;
+
+	public INamedTypeSymbol? ITestCollectionFactoryType => null;
+
+	public INamedTypeSymbol? ITestCollectionOrdererType => null;
+
+	public INamedTypeSymbol? ITestFrameworkType => null;
+
 	public INamedTypeSymbol? ITestOutputHelperType => null;
 
 	public static EmptyCoreContext Instance { get; } = new();
 
 	public INamedTypeSymbol? MemberDataAttributeType => null;
+
+	public INamedTypeSymbol? TestCaseOrdererAttributeType => null;
+
+	public INamedTypeSymbol? TestCollectionOrdererAttributeType => null;
+
+	public INamedTypeSymbol? TestFrameworkAttributeType => null;
 
 	public INamedTypeSymbol? TheoryAttributeType => null;
 

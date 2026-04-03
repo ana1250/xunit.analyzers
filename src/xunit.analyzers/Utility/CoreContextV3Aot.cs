@@ -4,13 +4,17 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3CoreAotContext : V3CoreContextBase
+public class CoreContextV3Aot : CoreContextV3Base
 {
-	V3CoreAotContext(
+	readonly Lazy<INamedTypeSymbol?> lazyICodeGenTestCollectionFactoryType;
+
+	CoreContextV3Aot(
 		Compilation compilation,
 		Version version) :
 			base(compilation, version)
-	{ }
+	{
+		lazyICodeGenTestCollectionFactoryType = new(() => TypeSymbolFactory.ICodeGenTestCollectionFactory_V3(compilation));
+	}
 
 	/// <remarks>
 	/// This will always return <see langword="null"/> for Native AOT, since this interface is obsolete.
@@ -26,6 +30,9 @@ public class V3CoreAotContext : V3CoreContextBase
 	public override INamedTypeSymbol? IFactAttributeType =>
 		null;
 
+	public override INamedTypeSymbol? ITestCollectionFactoryType =>
+		lazyICodeGenTestCollectionFactoryType.Value;
+
 	public static ICoreContextV3? Get(
 		Compilation compilation,
 		Version? versionOverride = null)
@@ -39,6 +46,6 @@ public class V3CoreAotContext : V3CoreContextBase
 				.FirstOrDefault(a => a.Name.Equals("xunit.v3.core.aot", StringComparison.OrdinalIgnoreCase))
 				?.Version;
 
-		return version is null ? null : new V3CoreAotContext(compilation, version);
+		return version is null ? null : new CoreContextV3Aot(compilation, version);
 	}
 }

@@ -4,11 +4,11 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3RunnerUtilityContext : V3RunnerUtilityContextBase
+public class RunnerUtilityContextV3 : RunnerUtilityContextBase, IRunnerUtilityContextV3
 {
 	const string assemblyPrefix = "xunit.v3.runner.utility.";
 
-	V3RunnerUtilityContext(
+	RunnerUtilityContextV3(
 		Compilation compilation,
 		string platform,
 		Version version) :
@@ -35,6 +35,6 @@ public class V3RunnerUtilityContext : V3RunnerUtilityContextBase
 		if (version is null || platform.Equals("aot", StringComparison.OrdinalIgnoreCase))
 			return null;
 
-		return new V3RunnerUtilityContext(compilation, platform, version);
+		return new RunnerUtilityContextV3(compilation, platform, version);
 	}
 }

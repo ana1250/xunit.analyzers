@@ -4,42 +4,27 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V2AssertContext : IAssertContext
+public class AssertContextV2 : AssertContextBase
 {
 	internal static readonly Version Version_2_5_0 = new("2.5.0");
 	internal static readonly Version Version_2_9_3 = new("2.9.3");
 
-	readonly Lazy<INamedTypeSymbol?> lazyAssertType;
-
-	V2AssertContext(
+	AssertContextV2(
 		Compilation compilation,
-		Version version)
-	{
-		Version = version;
+		Version version) :
+			base(compilation, version)
+	{ }
 
-		lazyAssertType = new(() => TypeSymbolFactory.Assert(compilation));
-	}
-
-	/// <inheritdoc/>
-	public INamedTypeSymbol? AssertType =>
-		lazyAssertType.Value;
-
-	/// <inheritdoc/>
-	public bool SupportsAssertFail =>
+	public override bool SupportsAssertFail =>
 		Version >= Version_2_5_0;
 
-	/// <inheritdoc/>
-	public bool SupportsAssertNullWithPointers =>
+	public override bool SupportsAssertNullWithPointers =>
 		false;
 
-	/// <inheritdoc/>
-	public bool SupportsInexactTypeAssertions =>
+	public override bool SupportsInexactTypeAssertions =>
 		Version >= Version_2_9_3;
 
-	/// <inheritdoc/>
-	public Version Version { get; }
-
-	public static V2AssertContext? Get(
+	public static AssertContextV2? Get(
 		Compilation compilation,
 		Version? versionOverride = null)
 	{

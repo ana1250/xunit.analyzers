@@ -4,33 +4,18 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V2RunnerUtilityContext : IRunnerUtilityContext
+public class RunnerUtilityContextV2 : RunnerUtilityContextBase
 {
 	const string assemblyPrefix = "xunit.runner.utility.";
-	readonly Lazy<INamedTypeSymbol?> lazyLongLivedMarshalByRefObjectType;
 
-	V2RunnerUtilityContext(
+	RunnerUtilityContextV2(
 		Compilation compilation,
 		string platform,
-		Version version)
-	{
-		Platform = platform;
-		Version = version;
+		Version version) :
+			base(compilation, platform, version)
+	{ }
 
-		lazyLongLivedMarshalByRefObjectType = new(() => TypeSymbolFactory.LongLivedMarshalByRefObject_RunnerUtility(compilation));
-	}
-
-	/// <inheritdoc/>
-	public INamedTypeSymbol? LongLivedMarshalByRefObjectType =>
-		lazyLongLivedMarshalByRefObjectType.Value;
-
-	/// <inheritdoc/>
-	public string Platform { get; }
-
-	/// <inheritdoc/>
-	public Version Version { get; }
-
-	public static V2RunnerUtilityContext? Get(
+	public static RunnerUtilityContextV2? Get(
 		Compilation compilation,
 		Version? versionOverride = null)
 	{

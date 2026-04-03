@@ -4,9 +4,9 @@ using Microsoft.CodeAnalysis;
 
 namespace Xunit.Analyzers;
 
-public class V3RunnerCommonContext : V3RunnerCommonContextBase
+public class RunnerCommonContextV3Aot : RunnerCommonContextV3Base
 {
-	V3RunnerCommonContext(
+	RunnerCommonContextV3Aot(
 		Compilation compilation,
 		Version version) :
 			base(compilation, version)
@@ -21,13 +21,13 @@ public class V3RunnerCommonContext : V3RunnerCommonContextBase
 		var assembly =
 			compilation
 				.ReferencedAssemblyNames
-				.FirstOrDefault(a => a.Name.Equals("xunit.v3.runner.common", StringComparison.OrdinalIgnoreCase));
+				.FirstOrDefault(a => a.Name.Equals("xunit.v3.runner.common.aot", StringComparison.OrdinalIgnoreCase));
 
 		if (assembly is null)
 			return null;
 
 		var version = versionOverride ?? assembly.Version;
 
-		return version is null ? null : new V3RunnerCommonContext(compilation, version);
+		return version is null ? null : new RunnerCommonContextV3Aot(compilation, version);
 	}
 }
