@@ -53,6 +53,12 @@ public interface ICoreContextV3 : ICoreContext
 	INamedTypeSymbol? ITestPipelineStartupType { get; }
 
 	/// <summary>
+	/// Gets a reference to type <c>IXunitTestAssembly</c> (in reflection mode)
+	/// or <c>ICodeGenTestAssemblyType</c> (in Native AOT mode), if available.
+	/// </summary>
+	INamedTypeSymbol? IXunitTestAssemblyType { get; }
+
+	/// <summary>
 	/// Gets a reference to type <c>JsonTypeIDAttribute</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? JsonTypeIDAttributeType { get; }

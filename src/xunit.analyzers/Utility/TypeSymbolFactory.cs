@@ -142,6 +142,9 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? IClassFixureOfT(Compilation compilation) =>
 		 Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IClassFixtureOfT);
 
+	public static INamedTypeSymbol? ICodeGenTestAssembly_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ICodeGenTestAssembly_V3);
+
 	public static INamedTypeSymbol? ICodeGenTestCollectionFactory_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.ICodeGenTestCollectionFactory_V3);
 
@@ -351,6 +354,9 @@ public static class TypeSymbolFactory
 
 	public static INamedTypeSymbol? IXunitSerializer_V3(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IXunitSerializer_V3);
+
+	public static INamedTypeSymbol? IXunitTestAssembly_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IXunitTestAssembly_V3);
 
 	public static INamedTypeSymbol? IXunitTestCollectionFactory_V2(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.IXunitTestCollectionFactory_V2);

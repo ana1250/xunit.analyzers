@@ -73,6 +73,8 @@ public abstract class CoreContextV3Base(
 	public INamedTypeSymbol? ITestPipelineStartupType =>
 		lazyITestPipelineStartupType.Value;
 
+	public abstract INamedTypeSymbol? IXunitTestAssemblyType { get; }
+
 	public INamedTypeSymbol? JsonTypeIDAttributeType =>
 		lazyJsonTypeIDAttributeType.Value;
 

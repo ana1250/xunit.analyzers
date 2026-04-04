@@ -8,6 +8,7 @@ public class CoreContextV3 : CoreContextV3Base
 {
 	readonly Lazy<INamedTypeSymbol?> lazyIDataAttributeType;
 	readonly Lazy<INamedTypeSymbol?> lazyIFactAttributeType;
+	readonly Lazy<INamedTypeSymbol?> lazyIXunitTestAssemblyType;
 	readonly Lazy<INamedTypeSymbol?> lazyIXunitTestCollectionFactoryType;
 
 	CoreContextV3(
@@ -17,6 +18,7 @@ public class CoreContextV3 : CoreContextV3Base
 	{
 		lazyIDataAttributeType = new(() => TypeSymbolFactory.IDataAttribute_V3(compilation));
 		lazyIFactAttributeType = new(() => TypeSymbolFactory.IFactAttribute_V3(compilation));
+		lazyIXunitTestAssemblyType = new(() => TypeSymbolFactory.IXunitTestAssembly_V3(compilation));
 		lazyIXunitTestCollectionFactoryType = new(() => TypeSymbolFactory.IXunitTestCollectionFactory_V3(compilation));
 	}
 
@@ -28,6 +30,9 @@ public class CoreContextV3 : CoreContextV3Base
 
 	public override INamedTypeSymbol? ITestCollectionFactoryType =>
 		lazyIXunitTestCollectionFactoryType.Value;
+
+	public override INamedTypeSymbol? IXunitTestAssemblyType =>
+		lazyIXunitTestAssemblyType.Value;
 
 	public static ICoreContextV3? Get(
 		Compilation compilation,

@@ -51,7 +51,14 @@ public static partial class Descriptors
 			"Class {0} must implement interface {1}"
 		);
 
-	// Placeholder for rule X3005
+	public static DiagnosticDescriptor X3005_TypeMustHaveCorrectPublicConstructor { get; } =
+		Diagnostic(
+			"xUnit3005",
+			"Type must have an appropriate non-obsolete public constructor",
+			Extensibility,
+			Error,
+			"Type '{0}' must have a non-obsolete public constructor: public {0}({1})"
+		);
 
 	// Placeholder for rule X3006
 

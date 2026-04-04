@@ -6,6 +6,7 @@ namespace Xunit.Analyzers;
 
 public class CoreContextV3Aot : CoreContextV3Base
 {
+	readonly Lazy<INamedTypeSymbol?> lazyICodeGenTestAssemblyType;
 	readonly Lazy<INamedTypeSymbol?> lazyICodeGenTestCollectionFactoryType;
 
 	CoreContextV3Aot(
@@ -13,6 +14,7 @@ public class CoreContextV3Aot : CoreContextV3Base
 		Version version) :
 			base(compilation, version)
 	{
+		lazyICodeGenTestAssemblyType = new(() => TypeSymbolFactory.ICodeGenTestAssembly_V3(compilation));
 		lazyICodeGenTestCollectionFactoryType = new(() => TypeSymbolFactory.ICodeGenTestCollectionFactory_V3(compilation));
 	}
 
@@ -32,6 +34,9 @@ public class CoreContextV3Aot : CoreContextV3Base
 
 	public override INamedTypeSymbol? ITestCollectionFactoryType =>
 		lazyICodeGenTestCollectionFactoryType.Value;
+
+	public override INamedTypeSymbol? IXunitTestAssemblyType =>
+		lazyICodeGenTestAssemblyType.Value;
 
 	public static ICoreContextV3? Get(
 		Compilation compilation,

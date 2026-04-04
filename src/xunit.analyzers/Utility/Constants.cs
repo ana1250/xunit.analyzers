@@ -143,6 +143,7 @@ public static class Constants
 			public const string IAsyncLifetime = "Xunit.IAsyncLifetime";
 			public const string IAttributeInfo_V2 = "Xunit.Abstractions.IAttributeInfo";
 			public const string IClassFixtureOfT = "Xunit.IClassFixture`1";
+			public const string ICodeGenTestAssembly_V3 = "Xunit.v3.ICodeGenTestAssembly";
 			public const string ICodeGenTestCollectionFactory_V3 = "Xunit.v3.ICodeGenTestCollectionFactory";
 			public const string ICollectionFixtureOfT = "Xunit.ICollectionFixture`1";
 			public const string IConsoleResultWriter_V3 = "Xunit.Runner.Common.IConsoleResultWriter";
@@ -192,6 +193,7 @@ public static class Constants
 			public const string IXunitSerializable_V2 = "Xunit.Abstractions.IXunitSerializable";
 			public const string IXunitSerializable_V3 = "Xunit.Sdk.IXunitSerializable";
 			public const string IXunitSerializer_V3 = "Xunit.Sdk.IXunitSerializer";
+			public const string IXunitTestAssembly_V3 = "Xunit.v3.IXunitTestAssembly";
 			public const string IXunitTestCollectionFactory_V2 = "Xunit.Sdk.IXunitTestCollectionFactory";
 			public const string IXunitTestCollectionFactory_V3 = "Xunit.v3.IXunitTestCollectionFactory";
 			public const string JsonTypeIDAttribute_V3 = "Xunit.Sdk.JsonTypeIDAttribute";
