@@ -52,13 +52,17 @@ public class X1057_TypeMustBePublicOrInternalTests
 	public async ValueTask V3_only()
 	{
 		var source = /* lang=c#-test */ """
+			using System;
 			using Xunit;
 			using Xunit.v3;
 
 			public class WithSkipExceptions
 			{
-				[Fact(SkipExceptions = new[] { {|#0:typeof(PrivateException)|} })]
+				[Fact(SkipExceptions = new Type[] { {|#0:typeof(PrivateException)|} })]
 				public void WithNewArraySyntax() { }
+
+				[Fact(SkipExceptions = new[] { {|#1:typeof(PrivateException)|} })]
+				public void WithImplicitArraySyntax() { }
 
 				class PrivateException { }
 			}
@@ -67,7 +71,12 @@ public class X1057_TypeMustBePublicOrInternalTests
 		await Verify.VerifyAnalyzerV3NonAot(source);
 
 #if NETCOREAPP && ROSLYN_LATEST
-		await Verify.VerifyAnalyzerV3Aot(source, Verify.Diagnostic().WithLocation(0).WithArguments("Exception", "WithSkipExceptions.PrivateException"));
+		var expectedAot = new[] {
+			Verify.Diagnostic().WithLocation(0).WithArguments("Exception", "WithSkipExceptions.PrivateException"),
+			Verify.Diagnostic().WithLocation(1).WithArguments("Exception", "WithSkipExceptions.PrivateException"),
+		};
+
+		await Verify.VerifyAnalyzerV3Aot(source, expectedAot);
 #endif
 	}
 
