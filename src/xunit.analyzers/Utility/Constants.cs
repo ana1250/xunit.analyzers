@@ -83,6 +83,7 @@ public static class Constants
 		public const string DeclaringType = nameof(DeclaringType);
 		public const string MemberName = nameof(MemberName);
 		public const string MemberType = nameof(MemberType);
+		public const string SkipExceptions = nameof(SkipExceptions);
 		public const string SkipType = nameof(SkipType);
 		public const string SkipUnless = nameof(SkipUnless);
 		public const string SkipWhen = nameof(SkipWhen);
@@ -133,6 +134,8 @@ public static class Constants
 		{
 			public const string AssemblyFixtureAttribute_V3 = "Xunit.AssemblyFixtureAttribute";
 			public const string Assert = "Xunit.Assert";
+			public const string BeforeAfterTestAttribute_V2 = "Xunit.Sdk.BeforeAfterTestAttribute";
+			public const string BeforeAfterTestAttribute_V3 = "Xunit.v3.BeforeAfterTestAttribute";
 			public const string ClassDataAttribute = "Xunit.ClassDataAttribute";
 			public const string ClassDataAttributeOfT_V3 = "Xunit.ClassDataAttribute`1";
 			public const string CollectionAttribute = "Xunit.CollectionAttribute";

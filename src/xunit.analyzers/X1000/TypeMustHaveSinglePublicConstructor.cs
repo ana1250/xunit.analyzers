@@ -17,8 +17,8 @@ public class TypeMustHaveSinglePublicConstructor() :
 		Guard.ArgumentNotNull(xunitContext);
 
 		var fixtureTypes = new[] {
-			xunitContext.Core.IClassFixtureType?.ConstructUnboundGenericType(),
-			xunitContext.Core.ICollectionFixtureType?.ConstructUnboundGenericType(),
+			xunitContext.Core.IClassFixtureType,
+			xunitContext.Core.ICollectionFixtureType,
 		}.WhereNotNull().ToImmutableHashSet(SymbolEqualityComparer.Default);
 
 		context.RegisterSymbolAction(context =>
@@ -30,7 +30,7 @@ public class TypeMustHaveSinglePublicConstructor() :
 				verifyType(typeSymbol, "Test class");
 
 			foreach (var @interface in typeSymbol.AllInterfaces)
-				if (@interface.IsGenericType && fixtureTypes.Contains(@interface.ConstructUnboundGenericType()))
+				if (@interface.IsGenericType && fixtureTypes.Contains(@interface.OriginalDefinition))
 					if (@interface.TypeArguments.Length == 1 && @interface.TypeArguments[0] is INamedTypeSymbol fixtureType)
 						verifyType(fixtureType, "Fixture");
 

@@ -9,6 +9,7 @@ public class CoreContextV2 : CoreContextBase
 	internal static readonly Version Version_2_2_0 = new("2.2.0");
 	internal static readonly Version Version_2_4_0 = new("2.4.0");
 
+	readonly Lazy<INamedTypeSymbol?> lazyBeforeAfterTestAttributeType;
 	readonly Lazy<INamedTypeSymbol?> lazyDataAttributeType;
 	readonly Lazy<INamedTypeSymbol?> lazyITestCaseOrdererType;
 	readonly Lazy<INamedTypeSymbol?> lazyITestCollectionOrdererType;
@@ -21,6 +22,7 @@ public class CoreContextV2 : CoreContextBase
 		Version version) :
 			base(compilation, version)
 	{
+		lazyBeforeAfterTestAttributeType = new(() => TypeSymbolFactory.BeforeAfterTestAttribute_V2(compilation));
 		lazyDataAttributeType = new(() => TypeSymbolFactory.DataAttribute_V2(compilation));
 		lazyITestCaseOrdererType = new(() => TypeSymbolFactory.ITestCaseOrderer_V2(compilation));
 		lazyITestCollectionOrdererType = new(() => TypeSymbolFactory.ITestCollectionOrderer_V2(compilation));
@@ -28,6 +30,9 @@ public class CoreContextV2 : CoreContextBase
 		lazyITestOutputHelperType = new(() => TypeSymbolFactory.ITestOutputHelper_V2(compilation));
 		lazyIXunitTestCollectionFactoryType = new(() => TypeSymbolFactory.IXunitTestCollectionFactory_V2(compilation));
 	}
+
+	public override INamedTypeSymbol? BeforeAfterTestAttributeType =>
+		lazyBeforeAfterTestAttributeType.Value;
 
 	public override INamedTypeSymbol? CulturedFactAttributeType => null;
 

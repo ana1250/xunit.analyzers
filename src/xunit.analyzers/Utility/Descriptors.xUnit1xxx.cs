@@ -519,7 +519,14 @@ public static partial class Descriptors
 			"{0} '{1}' must have a single public non-static constructor"
 		);
 
-	// Placeholder for rule X1057
+	public static DiagnosticDescriptor X1057_TypeMustBePublicOrInternal { get; } =
+		Diagnostic(
+			"xUnit1057",
+			"Type must be public or internal",
+			Usage,
+			Error,
+			"{0} type '{1}' must be declared public or internal"
+		);
 
 	// Placeholder for rule X1058
 

@@ -8,6 +8,7 @@ public abstract class CoreContextV3Base(
 	Version version) :
 		CoreContextBase(compilation, version), ICoreContextV3
 {
+	readonly Lazy<INamedTypeSymbol?> lazyBeforeAfterTestAttributeType = new(() => TypeSymbolFactory.BeforeAfterTestAttribute_V3(compilation));
 	readonly Lazy<INamedTypeSymbol?> lazyAssemblyFixtureAttributeType = new(() => TypeSymbolFactory.AssemblyFixtureAttribute_V3(compilation));
 	readonly Lazy<INamedTypeSymbol?> lazyClassDataAttributeOfTType = new(() => TypeSymbolFactory.ClassDataAttributeOfT_V3(compilation));
 	readonly Lazy<INamedTypeSymbol?> lazyCollectionAttributeOfTType = new(() => TypeSymbolFactory.CollectionAttributeOfT_V3(compilation));
@@ -29,6 +30,9 @@ public abstract class CoreContextV3Base(
 
 	public INamedTypeSymbol? AssemblyFixtureAttributeType =>
 		lazyAssemblyFixtureAttributeType.Value;
+
+	public override INamedTypeSymbol? BeforeAfterTestAttributeType =>
+		lazyBeforeAfterTestAttributeType.Value;
 
 	public INamedTypeSymbol? ClassDataAttributeOfTType =>
 		lazyClassDataAttributeOfTType.Value;

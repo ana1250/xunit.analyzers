@@ -8,6 +8,8 @@ public class EmptyCoreContext : ICoreContext
 	EmptyCoreContext()
 	{ }
 
+	public INamedTypeSymbol? BeforeAfterTestAttributeType => null;
+
 	public INamedTypeSymbol? ClassDataAttributeType => null;
 
 	public INamedTypeSymbol? CollectionAttributeType => null;

@@ -22,6 +22,8 @@ public abstract class CoreContextBase(
 	readonly Lazy<INamedTypeSymbol?> lazyTestFrameworkAttributeType = new(() => TypeSymbolFactory.TestFrameworkAttribute(compilation));
 	readonly Lazy<INamedTypeSymbol?> lazyTheoryAttributeType = new(() => TypeSymbolFactory.TheoryAttribute(compilation));
 
+	public abstract INamedTypeSymbol? BeforeAfterTestAttributeType { get; }
+
 	public INamedTypeSymbol? ClassDataAttributeType =>
 		lazyClassDataAttributeType.Value;
 

@@ -27,6 +27,12 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? AttributeUsageAttribute(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName("System.AttributeUsageAttribute");
 
+	public static INamedTypeSymbol? BeforeAfterTestAttribute_V2(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.BeforeAfterTestAttribute_V2);
+
+	public static INamedTypeSymbol? BeforeAfterTestAttribute_V3(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName(Constants.Types.Xunit.BeforeAfterTestAttribute_V3);
+
 	public static INamedTypeSymbol? BigInteger(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName("System.Numerics.BigInteger");
 

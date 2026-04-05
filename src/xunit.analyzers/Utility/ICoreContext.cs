@@ -10,6 +10,11 @@ namespace Xunit.Analyzers;
 public interface ICoreContext
 {
 	/// <summary>
+	/// Gets a reference to type <c>BeforeAfterTestAttribute</c>, if available.
+	/// </summary>
+	INamedTypeSymbol? BeforeAfterTestAttributeType { get; }
+
+	/// <summary>
 	/// Gets a reference to type <c>ClassDataAttribute</c>, if available.
 	/// </summary>
 	INamedTypeSymbol? ClassDataAttributeType { get; }
