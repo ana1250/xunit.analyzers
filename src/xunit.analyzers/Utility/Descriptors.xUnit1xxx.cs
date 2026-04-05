@@ -546,7 +546,14 @@ public static partial class Descriptors
 			"Test class '{0}' may not be decorated with ICollectionFixture<> (decorate the test collection class instead)"
 		);
 
-	// Placeholder for rule X1060
+	public static DiagnosticDescriptor X1060_CulturedTestMustHaveAtLeastOneCulture { get; } =
+		Diagnostic(
+			"xUnit1060",
+			"Cultured test methods must have at least one culture",
+			Usage,
+			Error,
+			"Cultured test methods must have at least one culture (tests with no cultures will be silently ignored)"
+		);
 
 	// Placeholder for rule X1061
 

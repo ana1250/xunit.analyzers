@@ -41,6 +41,17 @@ static class CodeAnalysisExtensions
 			}.WhereNotNull().ToImmutableHashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default);
 	}
 
+	extension(ICoreContextV3? coreContext)
+	{
+		public ImmutableHashSet<INamedTypeSymbol> CulturedTestAttributeTypes =>
+			coreContext is null
+				? ImmutableHashSet<INamedTypeSymbol>.Empty
+				: new[] {
+					coreContext.CulturedFactAttributeType,
+					coreContext.CulturedTheoryAttributeType
+				}.WhereNotNull().ToImmutableHashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default);
+	}
+
 	public static INamedTypeSymbol? FindNamedType(
 		this IAssemblySymbol assembly,
 		Func<INamedTypeSymbol, bool> selector)
