@@ -510,7 +510,14 @@ public static partial class Descriptors
 			"Conditional skipping cannot set both SkipUnless and SkipWhen. Remove one of the two values."
 		);
 
-	// Placeholder for rule X1056
+	public static DiagnosticDescriptor X1056_TypeMustHaveSinglePublicConstructor { get; } =
+		Diagnostic(
+			"xUnit1056",
+			"Type must have a single public non-static constructor",
+			Usage,
+			Error,
+			"{0} '{1}' must have a single public non-static constructor"
+		);
 
 	// Placeholder for rule X1057
 
