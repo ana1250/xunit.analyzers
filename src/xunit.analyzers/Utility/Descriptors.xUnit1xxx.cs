@@ -4,8 +4,6 @@ using static Xunit.Analyzers.Category;
 
 namespace Xunit.Analyzers;
 
-// NOTE: Don't update messages here without updating the Native AOT generator projects as well  (must have identical messages so we don't double up)
-
 public static partial class Descriptors
 {
 	public static DiagnosticDescriptor X1000_TestClassMustBePublic { get; } =
@@ -494,9 +492,23 @@ public static partial class Descriptors
 			"The member {0} referenced by MemberData is not initialized before use. Add an inline initializer or initialize the value in the static constructor."
 		);
 
-	// Placeholder for rule X1054
+	public static DiagnosticDescriptor X1054_ConditionalSkipPropertiesMustBePublicStaticBoolean { get; } =
+		Diagnostic(
+			"xUnit1054",
+			"Properties used for conditional skipping must be public, static, and return bool",
+			Usage,
+			Error,
+			"To be used for conditional skipping, type '{0}' must include a public static property named '{1}' returning 'bool'."
+		);
 
-	// Placeholder for rule X1055
+	public static DiagnosticDescriptor X1055_CannotSetBothSkipUnlessAndSkipWhen { get; } =
+		Diagnostic(
+			"xUnit1055",
+			"Conditional skipping cannot set both SkipUnless and SkipWhen",
+			Usage,
+			Error,
+			"Conditional skipping cannot set both SkipUnless and SkipWhen. Remove one of the two values."
+		);
 
 	// Placeholder for rule X1056
 

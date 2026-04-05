@@ -30,6 +30,9 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol? BigInteger(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName("System.Numerics.BigInteger");
 
+	public static INamedTypeSymbol Boolean(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetSpecialType(SpecialType.System_Boolean);
+
 	public static INamedTypeSymbol? CallerFilePathAttribute(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetTypeByMetadataName("System.Runtime.CompilerServices.CallerFilePathAttribute");
 
