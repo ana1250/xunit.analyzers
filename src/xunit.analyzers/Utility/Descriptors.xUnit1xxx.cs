@@ -528,7 +528,14 @@ public static partial class Descriptors
 			"{0} type '{1}' must be declared public or internal"
 		);
 
-	// Placeholder for rule X1058
+	public static DiagnosticDescriptor X1058_GenericCollectionDefinitionNotSupported { get; } =
+		Diagnostic(
+			"xUnit1058",
+			"Generic collection definitions are not supported in Native AOT",
+			Usage,
+			Error,
+			"Generic collection definitions require reflection features unavailable in Native AOT"
+		);
 
 	// Placeholder for rule X1059
 
