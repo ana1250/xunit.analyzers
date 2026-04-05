@@ -9,7 +9,7 @@ namespace Xunit.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class AssemblyAttributeImplementationValidation() :
-	XunitDiagnosticAnalyzer(
+	XunitV3DiagnosticAnalyzer(
 		Descriptors.X3004_TypeDoesNotImplementInterface,
 		Descriptors.X3005_TypeMustHaveCorrectPublicConstructor)
 {
@@ -192,7 +192,4 @@ public class AssemblyAttributeImplementationValidation() :
 			}
 		}, SyntaxKind.Attribute);
 	}
-
-	protected override bool ShouldAnalyze(XunitContext xunitContext) =>
-		Guard.ArgumentNotNull(xunitContext).HasV3References;
 }

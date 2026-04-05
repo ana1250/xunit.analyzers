@@ -8,7 +8,7 @@ namespace Xunit.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class ConditionalSkipPropertyValidation() :
-	XunitDiagnosticAnalyzer(
+	XunitV3DiagnosticAnalyzer(
 		Descriptors.X1054_ConditionalSkipPropertiesMustBePublicStaticBoolean,
 		Descriptors.X1055_CannotSetBothSkipUnlessAndSkipWhen)
 {
@@ -141,7 +141,4 @@ public class ConditionalSkipPropertyValidation() :
 			}
 		}, SyntaxKind.Attribute);
 	}
-
-	protected override bool ShouldAnalyze(XunitContext xunitContext) =>
-		Guard.ArgumentNotNull(xunitContext).HasV3References;
 }
