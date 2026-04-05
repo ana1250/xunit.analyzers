@@ -537,7 +537,14 @@ public static partial class Descriptors
 			"Generic collection definitions require reflection features unavailable in Native AOT"
 		);
 
-	// Placeholder for rule X1059
+	public static DiagnosticDescriptor X1059_TestClassCannotImplementICollectionFixture { get; } =
+		Diagnostic(
+			"xUnit1059",
+			"Test classes may not be decorated with ICollectionFixture<>",
+			Usage,
+			Warning,
+			"Test class '{0}' may not be decorated with ICollectionFixture<> (decorate the test collection class instead)"
+		);
 
 	// Placeholder for rule X1060
 }
