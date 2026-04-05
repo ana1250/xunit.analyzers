@@ -12,6 +12,15 @@ static class CodeAnalysisExtensions
 {
 	extension(ICoreContext coreContext)
 	{
+		/// <summary>
+		/// Gets a list of attribute types that includes:
+		/// <list type="bullet">
+		/// <item><c>DataAttribute</c></item>
+		/// <item><c>ClassDataAttribute</c></item>
+		/// <item><c>InlineDataAttribute</c></item>
+		/// <item><c>MemberDataAttribute</c></item>
+		/// </list>
+		/// </summary>
 		public ImmutableHashSet<INamedTypeSymbol> DataAttributeTypes =>
 			new[] {
 				coreContext.DataAttributeType,
@@ -20,6 +29,16 @@ static class CodeAnalysisExtensions
 				coreContext.MemberDataAttributeType,
 			}.WhereNotNull().ToImmutableHashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default);
 
+		/// <summary>
+		/// Gets a list of attribute types that includes:
+		/// <list type="bullet">
+		/// <item><c>FactAttribute</c></item>
+		/// <item><c>CulturedFactAttribute</c></item>
+		/// <item><c>TheoryAttribute</c></item>
+		/// <item><c>CulturedTheoryAttribute</c></item>
+		/// </list>
+		/// </summary>
+		/// <remarks>Cultured attributes are only available in v3</remarks>
 		public ImmutableHashSet<INamedTypeSymbol> FactAndTheoryAttributeTypes =>
 			new[] {
 				coreContext.FactAttributeType,
@@ -28,12 +47,28 @@ static class CodeAnalysisExtensions
 				coreContext.CulturedTheoryAttributeType,
 			}.WhereNotNull().ToImmutableHashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default);
 
+		/// <summary>
+		/// Gets a list of attribute types that includes:
+		/// <list type="bullet">
+		/// <item><c>FactAttribute</c></item>
+		/// <item><c>CulturedFactAttribute</c></item>
+		/// </list>
+		/// </summary>
+		/// <remarks>Cultured attributes are only available in v3</remarks>
 		public ImmutableHashSet<INamedTypeSymbol> FactAttributeTypes =>
 			new[] {
 				coreContext.FactAttributeType,
 				coreContext.CulturedFactAttributeType,
 			}.WhereNotNull().ToImmutableHashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default);
 
+		/// <summary>
+		/// Gets a list of attribute types that includes:
+		/// <list type="bullet">
+		/// <item><c>TheoryAttribute</c></item>
+		/// <item><c>CulturedTheoryAttribute</c></item>
+		/// </list>
+		/// </summary>
+		/// <remarks>Cultured attributes are only available in v3</remarks>
 		public ImmutableHashSet<INamedTypeSymbol> TheoryAttributeTypes =>
 			new[] {
 				coreContext.TheoryAttributeType,
@@ -43,6 +78,13 @@ static class CodeAnalysisExtensions
 
 	extension(ICoreContextV3? coreContext)
 	{
+		/// <summary>
+		/// Gets a list of attribute types that includes:
+		/// <list type="bullet">
+		/// <item><c>CulturedFactAttribute</c></item>
+		/// <item><c>CulturedTheoryAttribute</c></item>
+		/// </list>
+		/// </summary>
 		public ImmutableHashSet<INamedTypeSymbol> CulturedTestAttributeTypes =>
 			coreContext is null
 				? ImmutableHashSet<INamedTypeSymbol>.Empty
