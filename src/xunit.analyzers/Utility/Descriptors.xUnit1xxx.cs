@@ -555,7 +555,14 @@ public static partial class Descriptors
 			"Cultured test methods must have at least one culture (tests with no cultures will be silently ignored)"
 		);
 
-	// Placeholder for rule X1061
+	public static DiagnosticDescriptor X1061_FactMethodCannotBeGeneric { get; } =
+		Diagnostic(
+			"xUnit1061",
+			"Fact methods cannot be generic",
+			Usage,
+			Error,
+			"Fact methods cannot be generic"
+		);
 
 	// Placeholder for rule X1062
 
