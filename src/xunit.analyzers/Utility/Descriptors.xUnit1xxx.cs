@@ -564,7 +564,14 @@ public static partial class Descriptors
 			"Fact methods cannot be generic"
 		);
 
-	// Placeholder for rule X1062
+	public static DiagnosticDescriptor X1062_TheoryMethodCannotBeGeneric { get; } =
+		Diagnostic(
+			"xUnit1062",
+			"Theory methods cannot be generic in Native AOT",
+			Usage,
+			Error,
+			"Generic theory methods require reflection features unavailable in Native AOT. Convert the method to be non-generic."
+		);
 
 	// Placeholder for rule X1063
 
