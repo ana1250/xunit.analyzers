@@ -34,6 +34,7 @@ public class MemberDataShouldReferenceValidMember() :
 		Descriptors.X1040_TheoryDataTypeArgumentsMustMatchTestMethodParameters_IncompatibleNullability,
 		Descriptors.X1042_MemberDataTheoryDataIsRecommendedForStronglyTypedAnalysis,
 		Descriptors.X1053_MemberDataMemberMustBeStaticallyWrittenTo,
+		Descriptors.X1057_TypeMustBePublicOrInternal,
 		Descriptors.X1065_MemberDataMemberCannotBeOverloaded)
 {
 	public override void AnalyzeCompilation(
@@ -92,6 +93,13 @@ public class MemberDataShouldReferenceValidMember() :
 				var (testClassTypeSymbol, declaredMemberTypeSymbol) = GetClassTypesForAttribute(attributeSyntax.ArgumentList, semanticModel, context.CancellationToken);
 				if (declaredMemberTypeSymbol is null || testClassTypeSymbol is null)
 					continue;
+
+				// Member data symbol must be public or internal for Native AOT
+				if (xunitContext.HasV3AotReferences && declaredMemberTypeSymbol.DeclaredAccessibility is not Accessibility.Public and not Accessibility.Internal)
+				{
+					ReportTypeMustBePublicOrInternal(context, attributeSyntax, declaredMemberTypeSymbol);
+					return;
+				}
 
 				// Ensure we're pointing to something that exists
 				var memberSymbols = FindMemberSymbols(memberName, declaredMemberTypeSymbol, paramsCount, xunitContext.HasV3AotReferences);
@@ -718,6 +726,19 @@ public class MemberDataShouldReferenceValidMember() :
 					syntax.GetLocation(),
 					builder.ToImmutable(),
 					value?.ToString() ?? "null"
+				)
+			);
+
+	static void ReportTypeMustBePublicOrInternal(
+		SyntaxNodeAnalysisContext context,
+		AttributeSyntax attribute,
+		ITypeSymbol type) =>
+			context.ReportDiagnostic(
+				Diagnostic.Create(
+					Descriptors.X1057_TypeMustBePublicOrInternal,
+					attribute.GetLocation(),
+					"MemberData member",
+					SymbolDisplay.ToDisplayString(type)
 				)
 			);
 
