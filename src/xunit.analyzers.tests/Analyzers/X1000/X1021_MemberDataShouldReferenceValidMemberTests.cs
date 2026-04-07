@@ -9,6 +9,7 @@ public class X1021_MemberDataShouldReferenceValidMemberTests
 	{
 		var source = /* lang=c#-test */ """
 			#pragma warning disable xUnit1053
+			#pragma warning disable xUnit1066
 
 			using Xunit;
 

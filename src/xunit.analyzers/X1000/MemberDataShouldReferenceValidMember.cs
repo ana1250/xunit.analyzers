@@ -35,7 +35,8 @@ public class MemberDataShouldReferenceValidMember() :
 		Descriptors.X1042_MemberDataTheoryDataIsRecommendedForStronglyTypedAnalysis,
 		Descriptors.X1053_MemberDataMemberMustBeStaticallyWrittenTo,
 		Descriptors.X1057_TypeMustBePublicOrInternal,
-		Descriptors.X1065_MemberDataMemberCannotBeOverloaded)
+		Descriptors.X1065_MemberDataMemberCannotBeOverloaded,
+		Descriptors.X1066_MemberDataParameterCannotBeParams)
 {
 	public override void AnalyzeCompilation(
 		CompilationStartAnalysisContext context,
@@ -200,7 +201,7 @@ public class MemberDataShouldReferenceValidMember() :
 				var extraArguments = attributeSyntax.ArgumentList.Arguments.Skip(1).TakeWhile(a => a.NameEquals is null).ToList();
 
 				if (memberSymbol.Kind == SymbolKind.Method)
-					VerifyDataMethodParameterUsage(semanticModel, context, compilation, xunitContext, memberSymbol, memberName, extraArguments);
+					VerifyDataMethodParameterUsage(semanticModel, context, compilation, xunitContext, attributeSyntax, memberSymbol, memberName, declaredMemberTypeSymbol, extraArguments);
 				else
 				{
 					// Make sure we only have arguments for method-based member data
@@ -715,6 +716,22 @@ public class MemberDataShouldReferenceValidMember() :
 				)
 			);
 
+	static void ReportParamsParameter(
+		SyntaxNodeAnalysisContext context,
+		AttributeSyntax attribute,
+		string parameterName,
+		string memberName,
+		ITypeSymbol memberType) =>
+			context.ReportDiagnostic(
+				Diagnostic.Create(
+					Descriptors.X1066_MemberDataParameterCannotBeParams,
+					attribute.GetLocation(),
+					parameterName,
+					SymbolDisplay.ToDisplayString(memberType),
+					memberName
+				)
+			);
+
 	static void ReportTooManyArgumentsProvided(
 		SyntaxNodeAnalysisContext context,
 		ExpressionSyntax syntax,
@@ -877,16 +894,25 @@ public class MemberDataShouldReferenceValidMember() :
 		SyntaxNodeAnalysisContext context,
 		Compilation compilation,
 		XunitContext xunitContext,
+		AttributeSyntax attributeSyntax,
 		ISymbol memberSymbol,
 		string memberName,
+		ITypeSymbol memberType,
 		List<AttributeArgumentSyntax> extraArguments)
 	{
+		var dataMethodSymbol = (IMethodSymbol)memberSymbol;
+		var dataMethodParameterSymbols = dataMethodSymbol.Parameters;
+
+		// If this is a params param and we're in Native AOT mode, report it and bail
+		if (xunitContext.HasV3AotReferences && dataMethodParameterSymbols.FirstOrDefault(p => p.IsParams) is { } paramsParam)
+		{
+			ReportParamsParameter(context, attributeSyntax, paramsParam.Name, memberName, memberType);
+			return;
+		}
+
 		var argumentSyntaxList = GetParameterExpressionsFromArrayArgument(extraArguments, semanticModel);
 		if (argumentSyntaxList is null)
 			return;
-
-		var dataMethodSymbol = (IMethodSymbol)memberSymbol;
-		var dataMethodParameterSymbols = dataMethodSymbol.Parameters;
 
 		int valueIdx = 0, paramIdx = 0;
 		for (; valueIdx < argumentSyntaxList.Count && paramIdx < dataMethodParameterSymbols.Length; valueIdx++)

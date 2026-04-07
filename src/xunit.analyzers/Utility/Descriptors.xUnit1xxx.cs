@@ -600,7 +600,14 @@ public static partial class Descriptors
 			"Member data '{0}.{1}' is ambiguous. MemberData members may not be overloaded in Native AOT."
 		);
 
-	// Placeholder for rule X1066
+	public static DiagnosticDescriptor X1066_MemberDataParameterCannotBeParams { get; } =
+		Diagnostic(
+			"xUnit1066",
+			"MemberData parameter cannot use params modifier in Native AOT",
+			Usage,
+			Error,
+			"The params modifier on parameter '{0}' of '{1}.{2}' cannot be used for [MemberData] in Native AOT. Remove the modifier and create the arrays the [MemberData] arguments yourself."
+		);
 
 	// Placeholder for rule X1067
 

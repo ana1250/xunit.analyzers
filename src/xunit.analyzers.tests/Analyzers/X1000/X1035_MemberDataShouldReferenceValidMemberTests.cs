@@ -8,6 +8,8 @@ public class X1035_MemberDataShouldReferenceValidMemberTests
 	public async ValueTask V2_and_V3()
 	{
 		var source = /* lang=c#-test */ """
+			#pragma warning disable xUnit1066
+
 			using System;
 			using System.Collections.Generic;
 			using Xunit;
@@ -42,12 +44,22 @@ public class X1035_MemberDataShouldReferenceValidMemberTests
 				public void TestMethod4(int _) { }
 			}
 			""";
-		var expected = new[] {
+		var expectedNonAot = new[] {
 			Verify.Diagnostic("xUnit1035").WithLocation(0).WithArguments("s", "string"),
 			Verify.Diagnostic("xUnit1035").WithLocation(1).WithArguments("n", "int"),
 			Verify.Diagnostic("xUnit1035").WithLocation(2).WithArguments("seq", "System.Collections.Generic.IEnumerable<int>"),
 		};
 
-		await Verify.VerifyAnalyzer(source, expected);
+		await Verify.VerifyAnalyzerNonAot(source, expectedNonAot);
+
+#if NETCOREAPP && ROSLYN_LATEST
+		// We don't see issue #1 because xUnit1066 would be reported for the params parameter instead
+		var expectedAot = new[] {
+			Verify.Diagnostic("xUnit1035").WithLocation(0).WithArguments("s", "string"),
+			Verify.Diagnostic("xUnit1035").WithLocation(2).WithArguments("seq", "System.Collections.Generic.IEnumerable<int>"),
+		};
+
+		await Verify.VerifyAnalyzerV3Aot(source, expectedAot);
+#endif
 	}
 }
