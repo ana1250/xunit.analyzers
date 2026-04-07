@@ -15,30 +15,27 @@ using Microsoft.CodeAnalysis.Text;
 namespace Xunit.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class MemberDataShouldReferenceValidMember : XunitDiagnosticAnalyzer
+public class MemberDataShouldReferenceValidMember() :
+	XunitDiagnosticAnalyzer(
+		Descriptors.X1014_MemberDataShouldUseNameOfOperator,
+		Descriptors.X1015_MemberDataMustReferenceExistingMember,
+		Descriptors.X1016_MemberDataMustReferencePublicMember,
+		Descriptors.X1017_MemberDataMustReferenceStaticMember,
+		Descriptors.X1018_MemberDataMustReferenceValidMemberKind,
+		Descriptors.X1019_MemberDataMustReferenceMemberOfValidType,
+		Descriptors.X1020_MemberDataPropertyMustHaveGetter,
+		Descriptors.X1021_MemberDataNonMethodShouldNotHaveParameters,
+		Descriptors.X1034_MemberDataArgumentsMustMatchMethodParameters_NullShouldNotBeUsedForIncompatibleParameter,
+		Descriptors.X1035_MemberDataArgumentsMustMatchMethodParameters_IncompatibleValueType,
+		Descriptors.X1036_MemberDataArgumentsMustMatchMethodParameters_ExtraValue,
+		Descriptors.X1037_TheoryDataTypeArgumentsMustMatchTestMethodParameters_TooFewTypeParameters,
+		Descriptors.X1038_TheoryDataTypeArgumentsMustMatchTestMethodParameters_ExtraTypeParameters,
+		Descriptors.X1039_TheoryDataTypeArgumentsMustMatchTestMethodParameters_IncompatibleTypes,
+		Descriptors.X1040_TheoryDataTypeArgumentsMustMatchTestMethodParameters_IncompatibleNullability,
+		Descriptors.X1042_MemberDataTheoryDataIsRecommendedForStronglyTypedAnalysis,
+		Descriptors.X1053_MemberDataMemberMustBeStaticallyWrittenTo,
+		Descriptors.X1065_MemberDataMemberCannotBeOverloaded)
 {
-	public MemberDataShouldReferenceValidMember() :
-		base(
-			Descriptors.X1014_MemberDataShouldUseNameOfOperator,
-			Descriptors.X1015_MemberDataMustReferenceExistingMember,
-			Descriptors.X1016_MemberDataMustReferencePublicMember,
-			Descriptors.X1017_MemberDataMustReferenceStaticMember,
-			Descriptors.X1018_MemberDataMustReferenceValidMemberKind,
-			Descriptors.X1019_MemberDataMustReferenceMemberOfValidType,
-			Descriptors.X1020_MemberDataPropertyMustHaveGetter,
-			Descriptors.X1021_MemberDataNonMethodShouldNotHaveParameters,
-			Descriptors.X1034_MemberDataArgumentsMustMatchMethodParameters_NullShouldNotBeUsedForIncompatibleParameter,
-			Descriptors.X1035_MemberDataArgumentsMustMatchMethodParameters_IncompatibleValueType,
-			Descriptors.X1036_MemberDataArgumentsMustMatchMethodParameters_ExtraValue,
-			Descriptors.X1037_TheoryDataTypeArgumentsMustMatchTestMethodParameters_TooFewTypeParameters,
-			Descriptors.X1038_TheoryDataTypeArgumentsMustMatchTestMethodParameters_ExtraTypeParameters,
-			Descriptors.X1039_TheoryDataTypeArgumentsMustMatchTestMethodParameters_IncompatibleTypes,
-			Descriptors.X1040_TheoryDataTypeArgumentsMustMatchTestMethodParameters_IncompatibleNullability,
-			Descriptors.X1042_MemberDataTheoryDataIsRecommendedForStronglyTypedAnalysis,
-			Descriptors.X1053_MemberDataMemberMustBeStaticallyWrittenTo
-		)
-	{ }
-
 	public override void AnalyzeCompilation(
 		CompilationStartAnalysisContext context,
 		XunitContext xunitContext)
@@ -97,12 +94,18 @@ public class MemberDataShouldReferenceValidMember : XunitDiagnosticAnalyzer
 					continue;
 
 				// Ensure we're pointing to something that exists
-				var memberSymbol = FindMemberSymbol(memberName, declaredMemberTypeSymbol, paramsCount);
-				if (memberSymbol is null)
+				var memberSymbols = FindMemberSymbols(memberName, declaredMemberTypeSymbol, paramsCount, xunitContext.HasV3AotReferences);
+				switch (memberSymbols.Length)
 				{
-					ReportMissingMember(context, attributeSyntax, memberName, declaredMemberTypeSymbol);
-					return;
+					case 0:
+						ReportMissingMember(context, attributeSyntax, memberName, declaredMemberTypeSymbol);
+						return;
+
+					case > 1:
+						ReporterOverloadedMember(context, attributeSyntax, memberName, declaredMemberTypeSymbol);
+						return;
 				}
+				var memberSymbol = memberSymbols[0];
 
 				// Ensure we pointing to a field, method, or property
 				var memberReturnType = memberSymbol switch
@@ -250,27 +253,33 @@ public class MemberDataShouldReferenceValidMember : XunitDiagnosticAnalyzer
 		return false;
 	}
 
-	static ISymbol? FindMemberSymbol(
+	static ImmutableArray<ISymbol> FindMemberSymbols(
 		string memberName,
 		ITypeSymbol? type,
-		int paramsCount)
+		int paramsCount,
+		bool isAot)
 	{
-		if (paramsCount > 0 && FindMethodSymbol(memberName, type, paramsCount) is ISymbol methodSymbol)
-			return methodSymbol;
+		// Only want to try to look up the method overload for non-AOT usage; AOT requires non-overloaded methods
+		if (!isAot)
+		{
+			var methodSymbols = FindMethodSymbols(memberName, type, paramsCount);
+			if (methodSymbols.Length != 0)
+				return methodSymbols;
+		}
 
 		while (type is not null)
 		{
-			var memberSymbol = type.GetMembers(memberName).FirstOrDefault();
-			if (memberSymbol is not null)
-				return memberSymbol;
+			var memberSymbols = type.GetMembers(memberName);
+			if (memberSymbols.Length != 0)
+				return memberSymbols;
 
 			type = type.BaseType;
 		}
 
-		return null;
+		return ImmutableArray<ISymbol>.Empty;
 	}
 
-	public static ISymbol? FindMethodSymbol(
+	public static ImmutableArray<ISymbol> FindMethodSymbols(
 		string memberName,
 		ITypeSymbol? type,
 		int paramsCount)
@@ -279,19 +288,20 @@ public class MemberDataShouldReferenceValidMember : XunitDiagnosticAnalyzer
 
 		while (type is not null)
 		{
-			var methodSymbol =
+			var methodSymbols =
 				type
 					.GetMembers(memberName)
 					.OfType<IMethodSymbol>()
-					.FirstOrDefault(x => x.Parameters.Length == paramsCount);
+					.Where(x => x.Parameters.Length == paramsCount)
+					.ToImmutableArray<ISymbol>();
 
-			if (methodSymbol is not null)
-				return methodSymbol;
+			if (methodSymbols.Length != 0)
+				return methodSymbols;
 
 			type = type.BaseType;
 		}
 
-		return null;
+		return ImmutableArray<ISymbol>.Empty;
 	}
 
 	static ITypeSymbol? FindTypeArgumentFromIEnumerable(
@@ -680,6 +690,20 @@ public class MemberDataShouldReferenceValidMember : XunitDiagnosticAnalyzer
 					Descriptors.X1017_MemberDataMustReferenceStaticMember,
 					attribute.GetLocation(),
 					memberProperties
+				)
+			);
+
+	static void ReporterOverloadedMember(
+		SyntaxNodeAnalysisContext context,
+		AttributeSyntax attribute,
+		string memberName,
+		ITypeSymbol testClassTypeSymbol) =>
+			context.ReportDiagnostic(
+				Diagnostic.Create(
+					Descriptors.X1065_MemberDataMemberCannotBeOverloaded,
+					attribute.GetLocation(),
+					SymbolDisplay.ToDisplayString(testClassTypeSymbol),
+					memberName
 				)
 			);
 

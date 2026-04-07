@@ -76,8 +76,9 @@ public class MemberDataShouldReferenceValidMember_ExtraValueFixer : XunitCodeFix
 		IMethodSymbol? methodSymbol = null;
 		while (paramsCount >= 0)
 		{
-			var memberSymbol = MemberDataShouldReferenceValidMember.FindMethodSymbol(memberName, declaredMemberTypeSymbol, paramsCount);
-			methodSymbol = memberSymbol as IMethodSymbol;
+			var memberSymbols = MemberDataShouldReferenceValidMember.FindMethodSymbols(memberName, declaredMemberTypeSymbol, paramsCount);
+			if (memberSymbols.Length == 1)
+				methodSymbol = memberSymbols[0] as IMethodSymbol;
 			if (methodSymbol is not null)
 				break;
 			paramsCount--;

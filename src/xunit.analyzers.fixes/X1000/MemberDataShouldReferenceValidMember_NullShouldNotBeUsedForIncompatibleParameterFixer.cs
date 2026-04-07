@@ -62,8 +62,8 @@ public class MemberDataShouldReferenceValidMember_NullShouldNotBeUsedForIncompat
 		if (memberName is null)
 			return;
 
-		var memberSymbol = MemberDataShouldReferenceValidMember.FindMethodSymbol(memberName, declaredMemberTypeSymbol, paramsCount);
-		if (memberSymbol is not IMethodSymbol methodSymbol)
+		var memberSymbols = MemberDataShouldReferenceValidMember.FindMethodSymbols(memberName, declaredMemberTypeSymbol, paramsCount);
+		if (memberSymbols.Length == 0 || memberSymbols[0] is not IMethodSymbol methodSymbol)
 			return;
 
 		var methodSyntaxes = methodSymbol.DeclaringSyntaxReferences;
