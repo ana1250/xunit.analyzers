@@ -36,7 +36,8 @@ public class MemberDataShouldReferenceValidMember() :
 		Descriptors.X1053_MemberDataMemberMustBeStaticallyWrittenTo,
 		Descriptors.X1057_TypeMustBePublicOrInternal,
 		Descriptors.X1065_MemberDataMemberCannotBeOverloaded,
-		Descriptors.X1066_MemberDataParameterCannotBeParams)
+		Descriptors.X1066_MemberDataParameterCannotBeParams,
+		Descriptors.X1067_MissingMemberDataMethodParameter)
 {
 	public override void AnalyzeCompilation(
 		CompilationStartAnalysisContext context,
@@ -373,13 +374,13 @@ public class MemberDataShouldReferenceValidMember() :
 		return (testClassTypeSymbol, memberTypeSymbol ?? testClassTypeSymbol);
 	}
 
-	static IList<ExpressionSyntax>? GetParameterExpressionsFromArrayArgument(
+	static IList<ExpressionSyntax> GetParameterExpressionsFromArrayArgument(
 		List<AttributeArgumentSyntax> arguments, SemanticModel semanticModel)
 	{
 		if (arguments.Count > 1)
 			return [.. arguments.Select(a => a.Expression)];
 		if (arguments.Count != 1)
-			return null;
+			return [];
 
 		var argumentExpression = arguments.Single().Expression;
 
@@ -702,6 +703,23 @@ public class MemberDataShouldReferenceValidMember() :
 				)
 			);
 
+	static void ReportNotEnoughArgumentsProvided(
+		SyntaxNodeAnalysisContext context,
+		AttributeSyntax attributeSyntax,
+		string memberName,
+		ITypeSymbol memberType,
+		IParameterSymbol firstUnprovidedParameter) =>
+			context.ReportDiagnostic(
+				Diagnostic.Create(
+					Descriptors.X1067_MissingMemberDataMethodParameter,
+					attributeSyntax.GetLocation(),
+					SymbolDisplay.ToDisplayString(memberType),
+					memberName,
+					SymbolDisplay.ToDisplayString(firstUnprovidedParameter.Type),
+					firstUnprovidedParameter.Name
+				)
+			);
+
 	static void ReporterOverloadedMember(
 		SyntaxNodeAnalysisContext context,
 		AttributeSyntax attribute,
@@ -911,9 +929,6 @@ public class MemberDataShouldReferenceValidMember() :
 		}
 
 		var argumentSyntaxList = GetParameterExpressionsFromArrayArgument(extraArguments, semanticModel);
-		if (argumentSyntaxList is null)
-			return;
-
 		int valueIdx = 0, paramIdx = 0;
 		for (; valueIdx < argumentSyntaxList.Count && paramIdx < dataMethodParameterSymbols.Length; valueIdx++)
 		{
@@ -992,6 +1007,13 @@ public class MemberDataShouldReferenceValidMember() :
 				// Stop moving paramIdx forward if the argument is a parameter array, regardless of xunit's support for it
 				paramIdx++;
 			}
+		}
+
+		if (paramIdx < dataMethodParameterSymbols.Length)
+		{
+			var firstRequiredParameter = dataMethodParameterSymbols.Skip(valueIdx).FirstOrDefault(p => !p.IsOptional);
+			if (firstRequiredParameter is not null)
+				ReportNotEnoughArgumentsProvided(context, attributeSyntax, memberName, memberType, firstRequiredParameter);
 		}
 
 		for (; valueIdx < argumentSyntaxList.Count; valueIdx++)

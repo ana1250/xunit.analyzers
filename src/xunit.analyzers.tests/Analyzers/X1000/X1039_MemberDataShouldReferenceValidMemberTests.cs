@@ -9,6 +9,8 @@ public class X1039_MemberDataShouldReferenceValidMemberTests
 	public async ValueTask V2_and_V3()
 	{
 		var source = /* lang=c#-test */ """
+			#pragma warning disable xUnit1067
+
 			using System.Collections.Generic;
 			using Xunit;
 
@@ -123,6 +125,8 @@ public class X1039_MemberDataShouldReferenceValidMemberTests
 	public async ValueTask V3_only()
 	{
 		var source = /* lang=c#-test */ """
+			#pragma warning disable xUnit1067
+
 			using System.Collections.Generic;
 			using Xunit;
 

@@ -9,6 +9,7 @@ public class X1066_MemberDataShouldReferenceValidMemberTests
 	{
 		var source = /* lang=c#-test */ """
 			#pragma warning disable xUnit1042
+			#pragma warning disable xUnit1067
 
 			using System.Collections.Generic;
 			using Xunit;
@@ -24,9 +25,8 @@ public class X1066_MemberDataShouldReferenceValidMemberTests
 
 		await Verify.VerifyAnalyzerNonAot(source);
 #if NETCOREAPP && ROSLYN_LATEST
-		var expectedAot = new[] {
-			Verify.Diagnostic("xUnit1066").WithLocation(0).WithArguments("a", "TestClass", "DataMethod"),
-		};
+		var expectedAot = Verify.Diagnostic("xUnit1066").WithLocation(0).WithArguments("a", "TestClass", "DataMethod");
+
 		await Verify.VerifyAnalyzerV3Aot(source, expectedAot);
 #endif
 	}

@@ -609,7 +609,14 @@ public static partial class Descriptors
 			"The params modifier on parameter '{0}' of '{1}.{2}' cannot be used for [MemberData] in Native AOT. Remove the modifier and create the arrays the [MemberData] arguments yourself."
 		);
 
-	// Placeholder for rule X1067
+	public static DiagnosticDescriptor X1067_MissingMemberDataMethodParameter { get; } =
+		Diagnostic(
+			"xUnit1067",
+			"There is no matching MemberData method argument",
+			Usage,
+			Error,
+			"There is no matching argument for '{0}.{1}' parameter: {2} {3}. Remove unused parameter(s), or add more argument(s)."
+		);
 
 	// Placeholder for rule X1068
 
