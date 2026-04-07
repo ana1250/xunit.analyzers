@@ -561,7 +561,7 @@ public static partial class Descriptors
 			"Fact methods cannot be generic",
 			Usage,
 			Error,
-			"Fact methods cannot be generic"
+			"Fact methods cannot be generic. Convert the method to be non-generic."
 		);
 
 	public static DiagnosticDescriptor X1062_TheoryMethodCannotBeGeneric { get; } =
@@ -582,7 +582,14 @@ public static partial class Descriptors
 			"Open generic test classes cannot be closed by the runtime. Remove the generic parameter(s) or close them."
 		);
 
-	// Placeholder for rule X1064
+	public static DiagnosticDescriptor X1064_TheoryParameterCannotBeParams { get; } =
+		Diagnostic(
+			"xUnit1064",
+			"Theory parameter cannot use params modifier in Native AOT",
+			Usage,
+			Error,
+			"The params modifier cannot be used with a theory parameter in Native AOT. Remove the modifier and create the arrays in the data sources instead."
+		);
 
 	// Placeholder for rule X1065
 
