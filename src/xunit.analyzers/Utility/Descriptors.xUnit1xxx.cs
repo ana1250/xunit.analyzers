@@ -573,7 +573,14 @@ public static partial class Descriptors
 			"Generic theory methods require reflection features unavailable in Native AOT. Convert the method to be non-generic."
 		);
 
-	// Placeholder for rule X1063
+	public static DiagnosticDescriptor X1063_TestClassCannotBeOpenGeneric { get; } =
+		Diagnostic(
+			"xUnit1063",
+			"Test classes cannot be an open generic type",
+			Usage,
+			Error,
+			"Open generic test classes cannot be closed by the runtime. Remove the generic parameter(s) or close them."
+		);
 
 	// Placeholder for rule X1064
 
