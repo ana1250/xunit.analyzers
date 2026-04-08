@@ -17,7 +17,7 @@ public class TestClassCannotBeOpenGeneric() :
 
 		context.RegisterSymbolAction(context =>
 		{
-			if (context.Symbol is not INamedTypeSymbol typeSymbol)
+			if (context.Symbol is not INamedTypeSymbol typeSymbol || typeSymbol.IsAbstract)
 				return;
 
 			if (!typeSymbol.IsTestClass(xunitContext, strict: true))

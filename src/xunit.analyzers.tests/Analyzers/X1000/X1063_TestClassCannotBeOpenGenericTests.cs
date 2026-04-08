@@ -20,6 +20,11 @@ public class X1063_TestClassCannotBeOpenGenericTests
 				public void TestMethod() { }
 			}
 
+			public abstract class AbstractOpenGenericBase<T> {
+				[Fact]
+				public void TestMethod() { }
+			}
+
 			public class ClosedGenericTestClass : OpenGenericBase<int> {
 				[Fact]
 				public void DerivedTestMethod() { }
