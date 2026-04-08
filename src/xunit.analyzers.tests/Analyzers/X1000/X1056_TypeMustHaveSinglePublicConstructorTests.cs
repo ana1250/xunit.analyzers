@@ -21,6 +21,10 @@ public class X1056_TypeMustHaveSinglePublicConstructorTests
 				[Fact] public static void TestMethod() { }
 			}
 
+			public abstract class AbstractTestClass {
+				[Fact] public void TestMethod() { }
+			}
+
 			public class TestClass_DefaultConstructor {
 				[Fact] public void TestMethod() { }
 			}
@@ -75,12 +79,15 @@ public class X1056_TypeMustHaveSinglePublicConstructorTests
 				static Fixture_DualConstructor() { }
 			}
 
+			public abstract class Fixture_Abstract { }
+
 			public class {|#10:ClassFixtureContainer|} :
 				IClassFixture<Fixture_DefaultConstructor>,
 				IClassFixture<Fixture_EmptyConstructor>,
 				IClassFixture<Fixture_EmptyConstructorWithNonPublicConstructors>,
 				IClassFixture<Fixture_NonEmptyConstructor>,
-				IClassFixture<Fixture_DualConstructor>
+				IClassFixture<Fixture_DualConstructor>,
+				IClassFixture<Fixture_Abstract>
 			{ }
 
 			public class {|#11:CollectionFixtureContainer|} :
@@ -88,14 +95,17 @@ public class X1056_TypeMustHaveSinglePublicConstructorTests
 				ICollectionFixture<Fixture_EmptyConstructor>,
 				ICollectionFixture<Fixture_EmptyConstructorWithNonPublicConstructors>,
 				ICollectionFixture<Fixture_NonEmptyConstructor>,
-				ICollectionFixture<Fixture_DualConstructor>
+				ICollectionFixture<Fixture_DualConstructor>,
+				ICollectionFixture<Fixture_Abstract>
 			{ }
 			""";
 		var expected = new[] {
 			Verify.Diagnostic().WithLocation(0).WithArguments("Test class", "TestClass_DualConstructor"),
 
 			Verify.Diagnostic().WithLocation(10).WithArguments("Fixture", "Fixture_DualConstructor"),
+			Verify.Diagnostic().WithLocation(10).WithArguments("Fixture", "Fixture_Abstract"),
 			Verify.Diagnostic().WithLocation(11).WithArguments("Fixture", "Fixture_DualConstructor"),
+			Verify.Diagnostic().WithLocation(11).WithArguments("Fixture", "Fixture_Abstract"),
 		};
 
 		await Verify.VerifyAnalyzer(source, expected);
