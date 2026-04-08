@@ -17,6 +17,10 @@ public class X1056_TypeMustHaveSinglePublicConstructorTests
 				public NonTestClass(int x) { }
 			}
 
+			public static class StaticTestClass {
+				[Fact] public static void TestMethod() { }
+			}
+
 			public class TestClass_DefaultConstructor {
 				[Fact] public void TestMethod() { }
 			}

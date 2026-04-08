@@ -27,17 +27,21 @@ public class TypeMustHaveSinglePublicConstructor() :
 				return;
 
 			if (typeSymbol.IsTestClass(xunitContext, strict: false))
-				verifyType(typeSymbol, "Test class");
+				verifyType(typeSymbol, "Test class", allowStatic: true);
 
 			foreach (var @interface in typeSymbol.AllInterfaces)
 				if (@interface.IsGenericType && fixtureTypes.Contains(@interface.OriginalDefinition))
 					if (@interface.TypeArguments.Length == 1 && @interface.TypeArguments[0] is INamedTypeSymbol fixtureType)
-						verifyType(fixtureType, "Fixture");
+						verifyType(fixtureType, "Fixture", allowStatic: false);
 
 			void verifyType(
 				INamedTypeSymbol type,
-				string typeDescription)
+				string typeDescription,
+				bool allowStatic)
 			{
+				if (allowStatic && type.IsStatic)
+					return;
+
 				var publicCtors = type.Constructors.Where(c => c.DeclaredAccessibility == Accessibility.Public && !c.IsStatic).ToArray();
 				if (publicCtors.Length != 1)
 					context.ReportDiagnostic(
