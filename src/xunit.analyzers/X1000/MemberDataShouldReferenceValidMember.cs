@@ -35,7 +35,7 @@ public class MemberDataShouldReferenceValidMember() :
 		Descriptors.X1042_MemberDataTheoryDataIsRecommendedForStronglyTypedAnalysis,
 		Descriptors.X1053_MemberDataMemberMustBeStaticallyWrittenTo,
 		Descriptors.X1057_TypeMustBePublicOrInternal,
-		Descriptors.X1065_MemberDataMemberCannotBeOverloaded,
+		Descriptors.X1065_MemberDataMethodIsAmbiguous,
 		Descriptors.X1066_MemberDataParameterCannotBeParams,
 		Descriptors.X1067_MissingMemberDataMethodParameter)
 {
@@ -112,7 +112,7 @@ public class MemberDataShouldReferenceValidMember() :
 						return;
 
 					case > 1:
-						ReporterOverloadedMember(context, attributeSyntax, memberName, declaredMemberTypeSymbol);
+						ReporterOverloadedMember(context, attributeSyntax, memberName, declaredMemberTypeSymbol, xunitContext.HasV3AotReferences);
 						return;
 				}
 				var memberSymbol = memberSymbols[0];
@@ -724,13 +724,15 @@ public class MemberDataShouldReferenceValidMember() :
 		SyntaxNodeAnalysisContext context,
 		AttributeSyntax attribute,
 		string memberName,
-		ITypeSymbol testClassTypeSymbol) =>
+		ITypeSymbol testClassTypeSymbol,
+		bool isAot) =>
 			context.ReportDiagnostic(
 				Diagnostic.Create(
-					Descriptors.X1065_MemberDataMemberCannotBeOverloaded,
+					Descriptors.X1065_MemberDataMethodIsAmbiguous,
 					attribute.GetLocation(),
 					SymbolDisplay.ToDisplayString(testClassTypeSymbol),
-					memberName
+					memberName,
+					isAot ? "Native AOT does not support overloaded MemberData methods." : "Rename the members to use different names."
 				)
 			);
 

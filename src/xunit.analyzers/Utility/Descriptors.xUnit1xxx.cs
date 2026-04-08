@@ -591,13 +591,13 @@ public static partial class Descriptors
 			"The params modifier cannot be used with a theory parameter in Native AOT. Remove the modifier and create the arrays in the data sources instead."
 		);
 
-	public static DiagnosticDescriptor X1065_MemberDataMemberCannotBeOverloaded { get; } =
+	public static DiagnosticDescriptor X1065_MemberDataMethodIsAmbiguous { get; } =
 		Diagnostic(
 			"xUnit1065",
-			"MemberData member may not be overloaded in Native AOT",
+			"MemberData method is ambiguous",
 			Usage,
 			Error,
-			"Member data '{0}.{1}' is ambiguous. MemberData members may not be overloaded in Native AOT."
+			"Member data '{0}.{1}' is ambiguous. {2}"
 		);
 
 	public static DiagnosticDescriptor X1066_MemberDataParameterCannotBeParams { get; } =
