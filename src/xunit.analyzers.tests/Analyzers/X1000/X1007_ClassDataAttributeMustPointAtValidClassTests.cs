@@ -22,6 +22,15 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 				IEnumerator IEnumerable.GetEnumerator() => null;
 			}
 
+			class DataClass_NonGeneric : IEnumerable {
+				public IEnumerator GetEnumerator() => null;
+			}
+
+			class DataClass_NonArray : IEnumerable<object> {
+				public IEnumerator<object> GetEnumerator() => null;
+				IEnumerator IEnumerable.GetEnumerator() => null;
+			}
+
 			class DataClass_Async : IAsyncEnumerable<object[]> {
 				public IAsyncEnumerator<object[]> GetAsyncEnumerator(CancellationToken cancellationToken = default) => null;
 			}
@@ -29,6 +38,8 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 			public class TestClass {
 				[Theory]
 				[ClassData(typeof(DataClass))]
+				[ClassData(typeof(DataClass_NonGeneric))]
+				[ClassData(typeof(DataClass_NonArray))]
 				[{|#0:ClassData(typeof(DataClass_Async))|}]
 				public void IAsyncEnumerable_Triggers(int n) { }
 			}
@@ -42,9 +53,15 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 	public async ValueTask V2_and_V3()
 	{
 		var source = /* lang=c#-test */ """
+			#pragma warning disable xUnit1050
+
 			using System.Collections;
 			using System.Collections.Generic;
 			using Xunit;
+
+			class DataClass_Enumerable: IEnumerable {
+				IEnumerator IEnumerable.GetEnumerator() => null;
+			}
 
 			class DataClass_Enumerable_Object: IEnumerable<object> {
 				public IEnumerator<object> GetEnumerator() => null;
@@ -76,27 +93,26 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 
 			public class TestClass {
 				[Theory]
-				[{|#0:ClassData(typeof(DataClass_Enumerable_Object))|}]
-				[{|#1:ClassData(typeof(DataClass_Abstract))|}]
-				[{|#2:ClassData(typeof(DataClass_NoParameterlessCtor))|}]
-				[{|#3:ClassData(typeof(DataClass_InternalCtor))|}]
-				[{|#4:ClassData(typeof(DataClass_PrivateCtor))|}]
+				[ClassData(typeof(DataClass_Enumerable))]
+				[ClassData(typeof(DataClass_Enumerable_Object))]
+				[{|#0:ClassData(typeof(DataClass_Abstract))|}]
+				[{|#1:ClassData(typeof(DataClass_NoParameterlessCtor))|}]
+				[{|#2:ClassData(typeof(DataClass_InternalCtor))|}]
+				[{|#3:ClassData(typeof(DataClass_PrivateCtor))|}]
 				public void TestMethod(int n) { }
 			}
 			""";
 		var expectedV2 = new[] {
-			Verify.Diagnostic("xUnit1007").WithLocation(0).WithArguments("DataClass_Enumerable_Object", SupportedV2),
-			Verify.Diagnostic("xUnit1007").WithLocation(1).WithArguments("DataClass_Abstract", SupportedV2),
-			Verify.Diagnostic("xUnit1007").WithLocation(2).WithArguments("DataClass_NoParameterlessCtor", SupportedV2),
-			Verify.Diagnostic("xUnit1007").WithLocation(3).WithArguments("DataClass_InternalCtor", SupportedV2),
-			Verify.Diagnostic("xUnit1007").WithLocation(4).WithArguments("DataClass_PrivateCtor", SupportedV2),
+			Verify.Diagnostic("xUnit1007").WithLocation(0).WithArguments("DataClass_Abstract", SupportedV2),
+			Verify.Diagnostic("xUnit1007").WithLocation(1).WithArguments("DataClass_NoParameterlessCtor", SupportedV2),
+			Verify.Diagnostic("xUnit1007").WithLocation(2).WithArguments("DataClass_InternalCtor", SupportedV2),
+			Verify.Diagnostic("xUnit1007").WithLocation(3).WithArguments("DataClass_PrivateCtor", SupportedV2),
 		};
 		var expectedV3 = new[] {
-			Verify.Diagnostic("xUnit1007").WithLocation(0).WithArguments("DataClass_Enumerable_Object", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(1).WithArguments("DataClass_Abstract", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(2).WithArguments("DataClass_NoParameterlessCtor", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(3).WithArguments("DataClass_InternalCtor", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(4).WithArguments("DataClass_PrivateCtor", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(0).WithArguments("DataClass_Abstract", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(1).WithArguments("DataClass_NoParameterlessCtor", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(2).WithArguments("DataClass_InternalCtor", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(3).WithArguments("DataClass_PrivateCtor", SupportedV3),
 		};
 
 		await Verify.VerifyAnalyzerV2(LanguageVersion.CSharp7_1, source, expectedV2);
@@ -107,10 +123,16 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 	public async ValueTask V3_only()
 	{
 		var source = /* lang=c#-test */ """
+			#pragma warning disable xUnit1050
+
 			using System.Collections;
 			using System.Collections.Generic;
 			using System.Threading;
 			using Xunit;
+
+			class DataClass_Enumerable: IEnumerable {
+				IEnumerator IEnumerable.GetEnumerator() => null;
+			}
 
 			class DataClass_Enumerable_Object: IEnumerable<object> {
 				public IEnumerator<object> GetEnumerator() => null;
@@ -142,11 +164,12 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 
 			public class TestClass {
 				[Theory]
-				[{|#0:ClassData<DataClass_Enumerable_Object>|}]
-				[{|#1:ClassData<DataClass_Abstract>|}]
-				[{|#2:ClassData<DataClass_NoParameterlessCtor>|}]
-				[{|#3:ClassData<DataClass_InternalCtor>|}]
-				[{|#4:ClassData<DataClass_PrivateCtor>|}]
+				[ClassData<DataClass_Enumerable>]
+				[ClassData<DataClass_Enumerable_Object>]
+				[{|#0:ClassData<DataClass_Abstract>|}]
+				[{|#1:ClassData<DataClass_NoParameterlessCtor>|}]
+				[{|#2:ClassData<DataClass_InternalCtor>|}]
+				[{|#3:ClassData<DataClass_PrivateCtor>|}]
 				public void TestMethod(int n) { }
 			}
 
@@ -243,11 +266,10 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 			""";
 #if ROSLYN_LATEST && !NETFRAMEWORK  // This is here because otherwise `dotnet format` destroys the multi-line source string
 		var expectedV3 = new[] {
-			Verify.Diagnostic("xUnit1007").WithLocation(0).WithArguments("DataClass_Enumerable_Object", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(1).WithArguments("DataClass_Abstract", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(2).WithArguments("DataClass_NoParameterlessCtor", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(3).WithArguments("DataClass_InternalCtor", SupportedV3),
-			Verify.Diagnostic("xUnit1007").WithLocation(4).WithArguments("DataClass_PrivateCtor", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(0).WithArguments("DataClass_Abstract", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(1).WithArguments("DataClass_NoParameterlessCtor", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(2).WithArguments("DataClass_InternalCtor", SupportedV3),
+			Verify.Diagnostic("xUnit1007").WithLocation(3).WithArguments("DataClass_PrivateCtor", SupportedV3),
 		};
 
 		await Verify.VerifyAnalyzerV3(LanguageVersion.CSharp11, source, expectedV3);

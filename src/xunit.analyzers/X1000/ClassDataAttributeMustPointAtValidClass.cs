@@ -211,36 +211,13 @@ public class ClassDataAttributeMustPointAtValidClass : XunitDiagnosticAnalyzer
 		AttributeSyntax attribute)
 	{
 		var v3 = xunitContext.HasV3References;
-		var iEnumerableOfObjectArrayType = TypeSymbolFactory.IEnumerableOfObjectArray(compilation);
-		var iEnumerableOfTheoryDataRowType = TypeSymbolFactory.IEnumerableOfITheoryDataRow(compilation);
-		var iAsyncEnumerableOfObjectArrayType = TypeSymbolFactory.IAsyncEnumerableOfObjectArray(compilation);
-		var iAsyncEnumerableOfTheoryDataRowType = TypeSymbolFactory.IAsyncEnumerableOfITheoryDataRow(compilation);
-
-		// Make sure we implement one of the interfaces
-		var valid = iEnumerableOfObjectArrayType.IsAssignableFrom(classType);
-
-		if (!valid && v3 && iAsyncEnumerableOfObjectArrayType is not null)
-			valid = iAsyncEnumerableOfObjectArrayType.IsAssignableFrom(classType);
-
-		if (!valid && v3 && iEnumerableOfTheoryDataRowType is not null)
-			valid = iEnumerableOfTheoryDataRowType.IsAssignableFrom(classType);
-
-		if (!valid && v3 && iAsyncEnumerableOfTheoryDataRowType is not null)
-			valid = iAsyncEnumerableOfTheoryDataRowType.IsAssignableFrom(classType);
-
-		// Also make sure we're non-abstract and have an empty constructor
-		valid =
-			valid &&
+		var valid =
+			classType.IsValidDataSource(v3, compilation) &&
 			!classType.IsAbstract &&
 			classType.InstanceConstructors.Any(c => c.Parameters.IsEmpty && c.DeclaredAccessibility == Accessibility.Public);
 
 		if (!valid)
-			ReportIncorrectImplementationType(
-				context,
-				xunitContext.HasV3References ? typesV3 : typesV2,
-				attribute,
-				classType
-			);
+			ReportIncorrectImplementationType(context, v3 ? typesV3 : typesV2, attribute, classType);
 
 		return valid;
 	}

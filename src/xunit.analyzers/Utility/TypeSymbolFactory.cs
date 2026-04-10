@@ -184,6 +184,9 @@ public static class TypeSymbolFactory
 	public static INamedTypeSymbol IDisposable(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetSpecialType(SpecialType.System_IDisposable);
 
+	public static INamedTypeSymbol IEnumerable(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetSpecialType(SpecialType.System_Collections_IEnumerable);
+
 	public static INamedTypeSymbol? IEnumerableOfITheoryDataRow(Compilation compilation)
 	{
 		var iTheoryDataRow = ITheoryDataRow_V3(compilation);
@@ -390,6 +393,9 @@ public static class TypeSymbolFactory
 
 	public static INamedTypeSymbol NullableOfT(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).GetSpecialType(SpecialType.System_Nullable_T);
+
+	public static INamedTypeSymbol Object(Compilation compilation) =>
+		Guard.ArgumentNotNull(compilation).GetSpecialType(SpecialType.System_Object);
 
 	public static IArrayTypeSymbol ObjectArray(Compilation compilation) =>
 		Guard.ArgumentNotNull(compilation).CreateArrayTypeSymbol(Guard.ArgumentNotNull(compilation).ObjectType);

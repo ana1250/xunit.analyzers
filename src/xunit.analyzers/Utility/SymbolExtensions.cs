@@ -179,6 +179,39 @@ public static class SymbolExtensions
 				exactMatch
 			);
 
+	public static bool IsValidDataSource(
+		this ITypeSymbol type,
+		bool v3,
+		Compilation compilation)
+	{
+		Guard.ArgumentNotNull(type);
+
+		var objectType = TypeSymbolFactory.Object(compilation);
+		var objectArrayType = TypeSymbolFactory.ObjectArray(compilation);
+		var iEnumerableType = TypeSymbolFactory.IEnumerable(compilation);
+
+		var typesToCheck = new[] { type }.Concat(type.AllInterfaces).ToArray();
+		var enumerableType = typesToCheck.Select(i => i.GetEnumerableType()).WhereNotNull().FirstOrDefault();
+		if (v3 && enumerableType is null)
+			enumerableType = typesToCheck.Select(i => i.GetAsyncEnumerableType()).WhereNotNull().FirstOrDefault();
+		if (enumerableType is null && iEnumerableType.IsAssignableFrom(type))
+			enumerableType = objectType;
+
+		if (enumerableType is null)
+			return false;
+
+		if (SymbolEqualityComparer.Default.Equals(objectType, enumerableType) || enumerableType is IArrayTypeSymbol)
+			return true;
+
+		if (!v3)
+			return false;
+
+		var iTheoryDataRowType = TypeSymbolFactory.ITheoryDataRow_V3(compilation);
+		var iTupleType = TypeSymbolFactory.ITuple(compilation);
+
+		return iTheoryDataRowType.IsAssignableFrom(enumerableType) || iTupleType.IsAssignableFrom(enumerableType);
+	}
+
 	public static ITypeSymbol? UnwrapEnumerable(
 		this ITypeSymbol? type,
 		Compilation compilation,
