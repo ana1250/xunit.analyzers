@@ -15,8 +15,8 @@ public class X1019_MemberDataShouldReferenceValidMember_ReturnTypeFixerTests
 			using Xunit;
 
 			public class TestClass {
-				public static IEnumerable<object> Data1 => null;
-				public static IEnumerable<object> Data2 => null;
+				public static IEnumerable<string> Data1 => null;
+				public static IEnumerable<string> Data2 => null;
 
 				[Theory]
 				[{|xUnit1019:MemberData(nameof(Data1))|}]

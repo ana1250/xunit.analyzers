@@ -5,8 +5,8 @@ using Verify = CSharpVerifier<Xunit.Analyzers.MemberDataShouldReferenceValidMemb
 
 public class X1019_MemberDataShouldReferenceValidMemberTests
 {
-	const string V2AllowedTypes = "'System.Collections.Generic.IEnumerable<object[]>'";
-	const string V3AllowedTypes = "'System.Collections.Generic.IEnumerable<object[]>', 'System.Collections.Generic.IAsyncEnumerable<object[]>', 'System.Collections.Generic.IEnumerable<Xunit.ITheoryDataRow>', 'System.Collections.Generic.IAsyncEnumerable<Xunit.ITheoryDataRow>', 'System.Collections.Generic.IEnumerable<System.Runtime.CompilerServices.ITuple>', or 'System.Collections.Generic.IAsyncEnumerable<System.Runtime.CompilerServices.ITuple>'";
+	const string V2AllowedTypes = "'IEnumerable<object[]>'";
+	const string V3AllowedTypes = "'IEnumerable<object[]>', 'IAsyncEnumerable<object[]>', 'IEnumerable<ITheoryDataRow>', 'IAsyncEnumerable<ITheoryDataRow>', 'IEnumerable<ITuple>', or 'IAsyncEnumerable<ITuple>'";
 
 	[Fact]
 	public async ValueTask V2_and_V3()
@@ -44,6 +44,7 @@ public class X1019_MemberDataShouldReferenceValidMemberTests
 			public class NamedSubtypeForIEnumerableStringArray : NamedTypeForIEnumerableStringArray {}
 
 			public class TestClass {
+				public static IEnumerable NonGenericSource;
 				public static IEnumerable<object> ObjectSource;
 				public static object NakedObjectSource;
 				public static object[] NakedObjectArraySource;
@@ -81,9 +82,10 @@ public class X1019_MemberDataShouldReferenceValidMemberTests
 				public static Task<IAsyncEnumerable<Tuple<string, int>>> TaskAsyncTypedTupleSource;
 				public static ValueTask<IAsyncEnumerable<Tuple<string, int>>> ValueTaskAsyncTypedTupleSource;
 
-				[{|#0:MemberData(nameof(ObjectSource))|}]
-				[{|#1:MemberData(nameof(NakedObjectSource))|}]
-				[{|#2:MemberData(nameof(NakedObjectArraySource))|}]
+				[MemberData(nameof(NonGenericSource))]
+				[MemberData(nameof(ObjectSource))]
+				[{|#0:MemberData(nameof(NakedObjectSource))|}]
+				[MemberData(nameof(NakedObjectArraySource))]
 				[MemberData(nameof(NakedObjectMatrixSource))]
 
 				[MemberData(nameof(ObjectArraySource))]
@@ -123,9 +125,7 @@ public class X1019_MemberDataShouldReferenceValidMemberTests
 			""";
 		var expectedV2 = new[] {
 			// Generally invalid types
-			Verify.Diagnostic("xUnit1019").WithLocation(0).WithArguments(V2AllowedTypes, $"System.Collections.Generic.IEnumerable<object>"),
-			Verify.Diagnostic("xUnit1019").WithLocation(1).WithArguments(V2AllowedTypes, $"object"),
-			Verify.Diagnostic("xUnit1019").WithLocation(2).WithArguments(V2AllowedTypes, $"object[]"),
+			Verify.Diagnostic("xUnit1019").WithLocation(0).WithArguments(V2AllowedTypes, $"object"),
 
 			// v2 does not support tuples, wrapping in Task/ValueTask, and does not support IAsyncEnumerable
 			Verify.Diagnostic("xUnit1019").WithLocation(10).WithArguments(V2AllowedTypes, $"System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<object[]>>"),
@@ -156,9 +156,7 @@ public class X1019_MemberDataShouldReferenceValidMemberTests
 		};
 		var expectedV3 = new[] {
 			// Generally invalid types
-			Verify.Diagnostic("xUnit1019").WithLocation(0).WithArguments(V3AllowedTypes, $"System.Collections.Generic.IEnumerable<object>"),
-			Verify.Diagnostic("xUnit1019").WithLocation(1).WithArguments(V3AllowedTypes, $"object"),
-			Verify.Diagnostic("xUnit1019").WithLocation(2).WithArguments(V3AllowedTypes, $"object[]"),
+			Verify.Diagnostic("xUnit1019").WithLocation(0).WithArguments(V3AllowedTypes, $"object"),
 		};
 
 		await Verify.VerifyAnalyzerV2(LanguageVersion.CSharp9, source, expectedV2);

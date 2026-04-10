@@ -174,10 +174,7 @@ public class MemberDataShouldReferenceValidMember() :
 				// Make sure the member returns a compatible type
 				var iEnumerableOfTheoryDataRowType = TypeSymbolFactory.IEnumerableOfITheoryDataRow(compilation);
 				var iAsyncEnumerableOfTheoryDataRowType = TypeSymbolFactory.IAsyncEnumerableOfITheoryDataRow(compilation);
-				var iEnumerableOfTupleType = TypeSymbolFactory.IEnumerableOfTuple(compilation);
-				var iAsyncEnumerableOfTupleType = TypeSymbolFactory.IAsyncEnumerableOfTuple(compilation);
-				var IsValidMemberReturnType =
-					VerifyDataSourceReturnType(context, compilation, xunitContext, memberReturnType, memberProperties, attributeSyntax, iEnumerableOfTheoryDataRowType, iAsyncEnumerableOfTheoryDataRowType, iEnumerableOfTupleType, iAsyncEnumerableOfTupleType);
+				var IsValidMemberReturnType = VerifyDataSourceReturnType(context, compilation, xunitContext, memberReturnType, memberProperties, attributeSyntax);
 
 				// Make sure public properties have a public getter
 				if (memberSymbol.Kind == SymbolKind.Property && memberSymbol.DeclaredAccessibility == Accessibility.Public)
@@ -312,42 +309,6 @@ public class MemberDataShouldReferenceValidMember() :
 		}
 
 		return ImmutableArray<ISymbol>.Empty;
-	}
-
-	static ITypeSymbol? FindTypeArgumentFromIEnumerable(
-		ITypeSymbol? start,
-		Compilation compilation)
-	{
-		if (start is not INamedTypeSymbol namedStart)
-			return null;
-
-		var iEnumerableOfT = TypeSymbolFactory.IEnumerableOfT(compilation);
-		if (iEnumerableOfT is null)
-			return null;
-
-		var current = namedStart;
-		while (current != null)
-		{
-			// If this class implements IEnumerable<T>, return T type argument
-			foreach (var iface in current.AllInterfaces)
-				if (SymbolEqualityComparer.Default.Equals(iface.OriginalDefinition, iEnumerableOfT))
-					return iface.TypeArguments.FirstOrDefault();
-
-			// Navigate to its Base types to investigate if they implement IEnumerable,
-			// attempt to resolve the base type from the source syntax (handles `: ValidExamples`).
-			var declaredBase = ResolveDeclaredBaseTypeFromSyntax(current, compilation) as INamedTypeSymbol;
-
-			// Prefer declaredBase when available; otherwise fall back to the BaseType symbol.
-			var next = declaredBase ?? current.BaseType;
-
-			// Stop if we reached object
-			if (next?.SpecialType == SpecialType.System_Object)
-				break;
-
-			current = next;
-		}
-
-		return null;
 	}
 
 	public static (INamedTypeSymbol? TestClass, ITypeSymbol? MemberClass) GetClassTypesForAttribute(
@@ -490,35 +451,16 @@ public class MemberDataShouldReferenceValidMember() :
 
 	static void ReportIncorrectReturnType(
 		SyntaxNodeAnalysisContext context,
-		INamedTypeSymbol iEnumerableOfObjectArrayType,
-		INamedTypeSymbol? iAsyncEnumerableOfObjectArrayType,
-		INamedTypeSymbol? iEnumerableOfTheoryDataRowType,
-		INamedTypeSymbol? iAsyncEnumerableOfTheoryDataRowType,
-		INamedTypeSymbol? iEnumerableOfTupleType,
-		INamedTypeSymbol? iAsyncEnumerableOfTupleType,
+		bool v3,
 		AttributeSyntax attribute,
 		ImmutableDictionary<string, string?> memberProperties,
 		ITypeSymbol memberType)
 	{
-		var validSymbols = "'" + SymbolDisplay.ToDisplayString(iEnumerableOfObjectArrayType) + "'";
+		var validSymbols = "'IEnumerable<object[]>'";
 
 		// Only want the extra types when we know ITheoryDataRow is valid
-		if (iAsyncEnumerableOfObjectArrayType is not null &&
-				iEnumerableOfTheoryDataRowType is not null &&
-				iAsyncEnumerableOfTheoryDataRowType is not null &&
-				iEnumerableOfTupleType is not null &&
-				iAsyncEnumerableOfTupleType is not null)
-#pragma warning disable RS1035  // The suggested fix is not available in this context
-			validSymbols += string.Format(
-				CultureInfo.CurrentCulture,
-				", '{0}', '{1}', '{2}', '{3}', or '{4}'",
-				SymbolDisplay.ToDisplayString(iAsyncEnumerableOfObjectArrayType),
-				SymbolDisplay.ToDisplayString(iEnumerableOfTheoryDataRowType),
-				SymbolDisplay.ToDisplayString(iAsyncEnumerableOfTheoryDataRowType),
-				SymbolDisplay.ToDisplayString(iEnumerableOfTupleType),
-				SymbolDisplay.ToDisplayString(iAsyncEnumerableOfTupleType)
-			);
-#pragma warning restore RS1035
+		if (v3)
+			validSymbols += ", 'IAsyncEnumerable<object[]>', 'IEnumerable<ITheoryDataRow>', 'IAsyncEnumerable<ITheoryDataRow>', 'IEnumerable<ITuple>', or 'IAsyncEnumerable<ITuple>'";
 
 		context.ReportDiagnostic(
 			Diagnostic.Create(
@@ -1039,60 +981,13 @@ public class MemberDataShouldReferenceValidMember() :
 		XunitContext xunitContext,
 		ITypeSymbol memberType,
 		ImmutableDictionary<string, string?> memberProperties,
-		AttributeSyntax attributeSyntax,
-		INamedTypeSymbol? iEnumerableOfTheoryDataRowType,
-		INamedTypeSymbol? iAsyncEnumerableOfTheoryDataRowType,
-		INamedTypeSymbol? iEnumerableOfTupleType,
-		INamedTypeSymbol? iAsyncEnumerableOfTupleType)
+		AttributeSyntax attributeSyntax)
 	{
 		var v3 = xunitContext.HasV3References;
-		var iEnumerableOfObjectArrayType = TypeSymbolFactory.IEnumerableOfObjectArray(compilation);
-		var iAsyncEnumerableOfObjectArrayType = TypeSymbolFactory.IAsyncEnumerableOfObjectArray(compilation);
-
-		var valid = iEnumerableOfObjectArrayType.IsAssignableFrom(memberType);
-
-		// Special-case handling for IEnumerable<T> where T is not object[]. If T is any array type, it is assignable to object[] and therefore valid.
-		var memberEnumerableType = memberType.GetEnumerableType();
-		if (!valid && memberEnumerableType is not null)
-			valid = memberEnumerableType.TypeKind == TypeKind.Array;
-
-		if (!valid && v3 && iAsyncEnumerableOfObjectArrayType is not null)
-			valid = iAsyncEnumerableOfObjectArrayType.IsAssignableFrom(memberType);
-
-		if (!valid && v3 && iEnumerableOfTheoryDataRowType is not null)
-			valid = iEnumerableOfTheoryDataRowType.IsAssignableFrom(memberType);
-
-		if (!valid && v3 && iAsyncEnumerableOfTheoryDataRowType is not null)
-			valid = iAsyncEnumerableOfTheoryDataRowType.IsAssignableFrom(memberType);
-
-		if (!valid && v3 && iEnumerableOfTupleType is not null)
-			valid = iEnumerableOfTupleType.IsAssignableFrom(memberType);
-
-		if (!valid && v3 && iAsyncEnumerableOfTupleType is not null)
-			valid = iAsyncEnumerableOfTupleType.IsAssignableFrom(memberType);
-
-		// If still invalid and the member is a class, check whether it implements IEnumerable<T> and verify that T is an array type.
-		// This ensures the data can be safely converted to IEnumerable<object[]>.
-		if (!valid && memberType.TypeKind == TypeKind.Class)
-		{
-			var resolvedIEnumerableTypeArgument = FindTypeArgumentFromIEnumerable(memberType, compilation);
-			if (resolvedIEnumerableTypeArgument is not null)
-				valid = (resolvedIEnumerableTypeArgument.TypeKind == TypeKind.Array);
-		}
+		var valid = memberType.IsValidDataSource(v3, compilation);
 
 		if (!valid)
-			ReportIncorrectReturnType(
-				context,
-				iEnumerableOfObjectArrayType,
-				iAsyncEnumerableOfObjectArrayType,
-				iEnumerableOfTheoryDataRowType,
-				iAsyncEnumerableOfTheoryDataRowType,
-				iEnumerableOfTupleType,
-				iAsyncEnumerableOfTupleType,
-				attributeSyntax,
-				memberProperties,
-				memberType
-			);
+			ReportIncorrectReturnType(context, v3, attributeSyntax, memberProperties, memberType);
 
 		return valid;
 	}
