@@ -105,7 +105,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		TestBase<XunitVerifierV3>(languageVersion, CodeAnalyzerHelper.CurrentXunitV3RunnerUtility)
 	{ }
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	class TestV3Aot(LanguageVersion languageVersion) :
 		TestBase<XunitVerifierV3Aot>(languageVersion, CodeAnalyzerHelper.CurrentXunitV3Aot)
@@ -115,5 +115,5 @@ public partial class CSharpVerifier<TAnalyzer>
 		TestBase<XunitVerifierV3Aot>(languageVersion, CodeAnalyzerHelper.CurrentXunitV3RunnerUtilityAot)
 	{ }
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 }

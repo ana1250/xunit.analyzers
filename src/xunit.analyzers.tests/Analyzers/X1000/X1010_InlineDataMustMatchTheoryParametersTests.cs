@@ -842,7 +842,7 @@ public class X1010_InlineDataMustMatchTheoryParametersTests
 		await Verify.VerifyAnalyzerV3(LanguageVersion.CSharp8, source);
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	[Fact]
 	public async ValueTask V2_and_V3_WithCTRP() // CRTP: Curiously Recurring Template Pattern or T: Interface<T>
@@ -904,7 +904,7 @@ public class X1010_InlineDataMustMatchTheoryParametersTests
 		await Verify.VerifyAnalyzerV3Aot(source, expected);
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	internal class Analyzer_v2_Pre240 : InlineDataMustMatchTheoryParameters
 	{

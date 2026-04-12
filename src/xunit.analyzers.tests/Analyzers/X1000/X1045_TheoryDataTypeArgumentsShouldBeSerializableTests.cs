@@ -155,7 +155,7 @@ public class X1045_TheoryDataTypeArgumentsShouldBeSerializableTests
 		await Verify.VerifyAnalyzerV2(LanguageVersion.CSharp9, source);
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	[Fact]
 	public async ValueTask V2_only_NetCore()
@@ -204,7 +204,7 @@ public class X1045_TheoryDataTypeArgumentsShouldBeSerializableTests
 		await Verify.VerifyAnalyzerV2(LanguageVersion.CSharp11, source);
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	[Fact]
 	public async ValueTask V3_only_NonAOT()
@@ -321,7 +321,7 @@ public class X1045_TheoryDataTypeArgumentsShouldBeSerializableTests
 		await Verify.VerifyAnalyzerV3NonAot(LanguageVersion.CSharp9, source);
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	[Fact]
 	public async ValueTask V3_only_NonAOT_NetCore()
@@ -354,7 +354,7 @@ public class X1045_TheoryDataTypeArgumentsShouldBeSerializableTests
 		await Verify.VerifyAnalyzerV3NonAot(LanguageVersion.CSharp11, source);
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	internal class Analyzer_v3_Pre301 : TheoryDataTypeArgumentsShouldBeSerializable
 	{

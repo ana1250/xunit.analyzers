@@ -1,10 +1,7 @@
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 using Verify = CSharpVerifier<Xunit.Analyzers.CulturedTestMustHaveAtLeastOneCulture>;
-
-#if ROSLYN_LATEST
-using Microsoft.CodeAnalysis.CSharp;
-#endif
 
 public class X1060_CulturedTestMustHaveAtLeastOneCultureTests
 {
@@ -17,7 +14,11 @@ public class X1060_CulturedTestMustHaveAtLeastOneCultureTests
 			public class TestClass {
 				[CulturedFact(new[] { "en-US" })]
 				[CulturedTheory(new[] { "en-US" })]
-				public void Success() { }
+				public void Success1() { }
+
+				[CulturedFact(["en-US"])]
+				[CulturedTheory(["en-US"])]
+				public void Success2() { }
 
 				[[|CulturedFact(new string[] { })|]]
 				[[|CulturedTheory(new string[] { })|]]
@@ -26,33 +27,13 @@ public class X1060_CulturedTestMustHaveAtLeastOneCultureTests
 				[[|CulturedFact(new string[0])|]]
 				[[|CulturedTheory(new string[0])|]]
 				public void Failure2() { }
-			}
-			""";
-
-		await Verify.VerifyAnalyzerV3(source);
-	}
-
-#if ROSLYN_LATEST  // Need C# 12 for collection expression
-
-	[Fact]
-	public async ValueTask V3_only_CSharp12()
-	{
-		var source = /* lang=c#-test */ """
-			using Xunit;
-
-			public class TestClass {
-				[CulturedFact(["en-US"])]
-				[CulturedTheory(["en-US"])]
-				public void Success() { }
 
 				[[|CulturedFact([])|]]
 				[[|CulturedTheory([])|]]
-				public void Failure() { }
+				public void Failure3() { }
 			}
 			""";
 
 		await Verify.VerifyAnalyzerV3(LanguageVersion.CSharp12, source);
 	}
-
-#endif  // ROSLYN_LATEST
 }

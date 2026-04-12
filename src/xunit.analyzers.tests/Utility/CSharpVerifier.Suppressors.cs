@@ -71,7 +71,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		await VerifySuppressorV3(languageVersion, sources, suppressedAnalyzers, diagnostics);
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress another analyzers. Runs against
@@ -136,7 +136,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		await VerifySuppressorV3Aot(languageVersion, sources, suppressedAnalyzers, diagnostics);
 	}
 
-#endif // NETCOREAPP && ROSLYN_LATEST
+#endif // NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress another analyzers. Runs against
@@ -211,7 +211,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		await VerifyCompilerWarningSuppressorV3(languageVersion, sources, diagnostics);
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress a compiler warning. Runs against
@@ -234,7 +234,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		await VerifyCompilerWarningSuppressorV3Aot(languageVersion, sources, diagnostics);
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress a compiler warning. Runs against
@@ -362,7 +362,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		params DiagnosticResult[] diagnostics)
 	{
 		await VerifySuppressorV3NonAot(LanguageVersion.CSharp6, [source], [suppressedAnalyzer], diagnostics);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await VerifySuppressorV3Aot(LanguageVersion.CSharp13, [source], [suppressedAnalyzer], diagnostics);
 #endif
 	}
@@ -386,7 +386,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		params DiagnosticResult[] diagnostics)
 	{
 		await VerifySuppressorV3NonAot(languageVersion, [source], [suppressedAnalyzer], diagnostics);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await VerifySuppressorV3Aot(languageVersion, [source], [suppressedAnalyzer], diagnostics);
 #endif
 	}
@@ -410,12 +410,12 @@ public partial class CSharpVerifier<TAnalyzer>
 		params DiagnosticResult[] diagnostics)
 	{
 		await VerifySuppressorV3NonAot(languageVersion, sources, suppressedAnalyzers, diagnostics);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await VerifySuppressorV3Aot(languageVersion, sources, suppressedAnalyzers, diagnostics);
 #endif
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress another analyzers. Runs against
@@ -477,7 +477,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		await testAot.RunAsync();
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress another analyzers. Runs against
@@ -552,12 +552,12 @@ public partial class CSharpVerifier<TAnalyzer>
 		params DiagnosticResult[] diagnostics)
 	{
 		await VerifyCompilerWarningSuppressorV3NonAot(languageVersion, sources, diagnostics);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await VerifyCompilerWarningSuppressorV3Aot(languageVersion, sources, diagnostics);
 #endif
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress a compiler warning. Runs against
@@ -591,7 +591,7 @@ public partial class CSharpVerifier<TAnalyzer>
 		await testAot.RunAsync();
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	/// <summary>
 	/// Verify that an analyzer was used to suppress a compiler warning. Runs against

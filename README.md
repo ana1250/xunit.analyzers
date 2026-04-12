@@ -2,7 +2,7 @@
 
 This project contains source code analysis and cleanup rules for xUnit.net. Analysis and fixes are only supported with C#.
 
-**Requirements**: xUnit.net v2 or v3. Supported in Visual Studio 2019, 2022, and 2026 (as well as via command line builds with Roslyn 3.11+). Other environments (such as Mono or JetBrains Rider) may be able to use these analyzers as well; support and issue resolution will be provided by those third parties and not by xUnit.net itself.
+**Requirements**: xUnit.net v2 or v3. Supported in Visual Studio 2022 and 2026 (as well as via command line builds with Roslyn 4.12+). Other environments (such as Mono or JetBrains Rider) may be able to use these analyzers as well; support and issue resolution will be provided by those third parties and not by xUnit.net itself.
 
 **Documentation**: a list of supported rules is available at https://xunit.net/xunit.analyzers/rules/
 
@@ -10,7 +10,7 @@ This project contains source code analysis and cleanup rules for xUnit.net. Anal
 
 **Building**: see [BUILDING.md](https://github.com/xunit/xunit.analyzers/blob/main/BUILDING.md).
 
-> _**Note:** Our minimum supported versions of Visual Studio 2019, 2022, and 2026 align with the "Baseline" column of the "Support for Older Versions" table of [Visual Studio Product Lifecycle and Servicing](https://learn.microsoft.com/visualstudio/releases/2026/servicing-vs#support-for-older-versions), as these are the minimum versions supported by Microsoft. If you are experiencing issues with an older version of Visual Studio, please upgrade and verify the issue still exists before opening issues._
+> _**Note:** Our minimum supported versions of Visual Studio 2022 and 2026 align with the "Baseline" column of the "Support for Older Versions" table of [Visual Studio Product Lifecycle and Servicing](https://learn.microsoft.com/visualstudio/releases/2026/servicing-vs#support-for-older-versions), as these are the minimum versions supported by Microsoft. If you are experiencing issues with an older version of Visual Studio, please upgrade and verify the issue still exists before opening issues._
 
 ## How to install
 

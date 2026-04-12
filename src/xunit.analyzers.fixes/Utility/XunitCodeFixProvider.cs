@@ -6,9 +6,7 @@ namespace Xunit.Analyzers.Fixes;
 public abstract class XunitCodeFixProvider(params string[] diagnostics) :
 	CodeFixProvider
 {
-#pragma warning disable IDE0305  // Cannot convert this due to Roslyn 3.11
-	public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } = diagnostics.ToImmutableArray();
-#pragma warning restore IDE0305
+	public sealed override ImmutableArray<string> FixableDiagnosticIds { get; } = [.. diagnostics];
 
 	public override FixAllProvider? GetFixAllProvider() =>
 		null;

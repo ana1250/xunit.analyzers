@@ -1,10 +1,7 @@
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 using Verify = CSharpVerifier<Xunit.Analyzers.TypeMustBePublicOrInternal>;
-
-#if ROSLYN_LATEST
-using Microsoft.CodeAnalysis.CSharp;
-#endif
 
 public class X1057_TypeMustBePublicOrInternalTests
 {
@@ -37,7 +34,7 @@ public class X1057_TypeMustBePublicOrInternalTests
 		await Verify.VerifyAnalyzerV2(source.Replace("Xunit.v3", "Xunit.Sdk"));
 		await Verify.VerifyAnalyzerV3NonAot(source);
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		var expectedAot = new[] {
 			Verify.Diagnostic().WithLocation(0).WithArguments("Attribute", "WithBeforeAfter.MyBeforeAfter"),
 			Verify.Diagnostic().WithLocation(1).WithArguments("Fixture", "WithCollectionFixture.PrivateClass"),
@@ -64,34 +61,7 @@ public class X1057_TypeMustBePublicOrInternalTests
 				[Fact(SkipExceptions = new[] { {|#1:typeof(PrivateException)|} })]
 				public void WithImplicitArraySyntax() { }
 
-				class PrivateException { }
-			}
-			""";
-
-		await Verify.VerifyAnalyzerV3NonAot(source);
-
-#if NETCOREAPP && ROSLYN_LATEST
-		var expectedAot = new[] {
-			Verify.Diagnostic().WithLocation(0).WithArguments("Exception", "WithSkipExceptions.PrivateException"),
-			Verify.Diagnostic().WithLocation(1).WithArguments("Exception", "WithSkipExceptions.PrivateException"),
-		};
-
-		await Verify.VerifyAnalyzerV3Aot(source, expectedAot);
-#endif
-	}
-
-#if ROSLYN_LATEST  // Need C# 12 for collection expression
-
-	[Fact]
-	public async ValueTask V3_only_CSharp12()
-	{
-		var source = /* lang=c#-test */ """
-			using Xunit;
-			using Xunit.v3;
-
-			public class WithSkipExceptions
-			{
-				[Fact(SkipExceptions = [{|#0:typeof(PrivateException)|}])]
+				[Fact(SkipExceptions = [{|#2:typeof(PrivateException)|}])]
 				public void WithExpressionSyntax() { }
 
 				class PrivateException { }
@@ -101,9 +71,13 @@ public class X1057_TypeMustBePublicOrInternalTests
 		await Verify.VerifyAnalyzerV3NonAot(LanguageVersion.CSharp12, source);
 
 #if NETCOREAPP
-		await Verify.VerifyAnalyzerV3Aot(source, Verify.Diagnostic().WithLocation(0).WithArguments("Exception", "WithSkipExceptions.PrivateException"));
+		var expectedAot = new[] {
+			Verify.Diagnostic().WithLocation(0).WithArguments("Exception", "WithSkipExceptions.PrivateException"),
+			Verify.Diagnostic().WithLocation(1).WithArguments("Exception", "WithSkipExceptions.PrivateException"),
+			Verify.Diagnostic().WithLocation(2).WithArguments("Exception", "WithSkipExceptions.PrivateException"),
+		};
+
+		await Verify.VerifyAnalyzerV3Aot(LanguageVersion.CSharp12, source, expectedAot);
 #endif
 	}
-
-#endif  // ROSLYN_LATEST
 }

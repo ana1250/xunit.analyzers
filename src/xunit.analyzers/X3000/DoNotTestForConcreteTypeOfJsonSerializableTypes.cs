@@ -54,11 +54,7 @@ public class DoNotTestForConcreteTypeOfJsonSerializableTypes : XunitV3Diagnostic
 			if (isPatternOperation.Pattern is not INegatedPatternOperation negatedPatternOperation)
 				return;
 
-#if ROSLYN_LATEST
 			if (negatedPatternOperation.ChildOperations.FirstOrDefault() is not ITypePatternOperation typePatternOperation)
-#else
-			if (negatedPatternOperation.Children.FirstOrDefault() is not ITypePatternOperation typePatternOperation)
-#endif
 				return;
 
 			reportIfMessageType(context.ReportDiagnostic, semanticModel, typePatternOperation.MatchedType, isPatternOperation.Syntax);

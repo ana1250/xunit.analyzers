@@ -47,14 +47,12 @@ public class CulturedTestMustHaveAtLeastOneCulture() :
 				return;
 			}
 
-#if ROSLYN_LATEST
 			if (cultures.Expression is CollectionExpressionSyntax collectionSyntax)
 			{
 				if (collectionSyntax.Elements.Count == 0)
 					reportX1060();
 				return;
 			}
-#endif
 
 			void reportX1060() =>
 				context.ReportDiagnostic(

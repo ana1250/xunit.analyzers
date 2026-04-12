@@ -20,7 +20,7 @@ public class X1058_GenericCollectionDefinitionsInAotTests
 			""";
 
 		await Verify.VerifyAnalyzerNonAot(source);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await Verify.VerifyAnalyzerV3Aot(source, Verify.Diagnostic().WithLocation(0));
 #endif
 	}

@@ -1,10 +1,7 @@
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 using Verify = CSharpVerifier<Xunit.Analyzers.EnsureFixturesHaveASource>;
-
-#if NETCOREAPP && ROSLYN_LATEST
-using Microsoft.CodeAnalysis.CSharp;
-#endif
 
 public class X1041_EnsureFixturesHaveASourceTests
 {
@@ -232,34 +229,14 @@ public class X1041_EnsureFixturesHaveASourceTests
 				[Fact]
 				public void TestMethod() { }
 			}
-			""";
-
-		await Verify.VerifyAnalyzerV3(source);
-	}
-
-#if NETCOREAPP && ROSLYN_LATEST  // C# 11 is required for generic attributes
-
-	[Fact]
-	public async ValueTask V3_only_GenericAttribute()
-	{
-		var source = /* lang=c#-test */ """
-			using Xunit;
-
-			public class Fixture { }
-
-			// Inherited collection fixture (by type, generic)
-
-			public abstract class TestContext {
-				protected TestContext(Fixture fixture) { }
-			}
 
 			[CollectionDefinition]
-			public class InheritedFixtureByTypeCollection : ICollectionFixture<Fixture> { }
-
+			public class InheritedFixtureByTypeCollection_Generic : ICollectionFixture<Fixture> { }
+			
 			[Collection<InheritedFixtureByTypeCollection>]
-			public class WithInheritedFixtureByType_DoesNotTrigger : TestContext {
-				public WithInheritedFixtureByType_DoesNotTrigger(Fixture fixture) : base(fixture) { }
-
+			public class WithInheritedFixtureByType_Generic_DoesNotTrigger : TestContext {
+				public WithInheritedFixtureByType_Generic_DoesNotTrigger(Fixture fixture) : base(fixture) { }
+			
 				[Fact]
 				public void TestMethod() { }
 			}
@@ -267,6 +244,4 @@ public class X1041_EnsureFixturesHaveASourceTests
 
 		await Verify.VerifyAnalyzerV3(LanguageVersion.CSharp11, source);
 	}
-
-#endif  // NETCOREAPP && ROSLYN_LATEST
 }

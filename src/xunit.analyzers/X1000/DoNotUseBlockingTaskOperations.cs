@@ -115,10 +115,8 @@ public class DoNotUseBlockingTaskOperations : XunitDiagnosticAnalyzer
 							if (invocation.Arguments[0].Value is IArrayCreationOperation arrayCreationOperation &&
 									arrayCreationOperation.Initializer is not null)
 								symbolsForSearch = arrayCreationOperation.Initializer.ElementValues.OfType<ILocalReferenceOperation>().Select(l => l.Local);
-#if ROSLYN_LATEST
 							else if (invocation.Arguments[0].Value is ICollectionExpressionOperation collectionExpressionOperation)
 								symbolsForSearch = collectionExpressionOperation.Elements.OfType<ILocalReferenceOperation>().Select(l => l.Local);
-#endif
 						}
 						break;
 					}
@@ -219,11 +217,7 @@ public class DoNotUseBlockingTaskOperations : XunitDiagnosticAnalyzer
 
 		bool validateSafeTasks(IOperation op)
 		{
-#if ROSLYN_LATEST
 			foreach (var childOperation in op.ChildOperations)
-#else
-			foreach (var childOperation in op.Children)
-#endif
 			{
 				// Stop looking once we've found the operation that is ours, since any
 				// code after that operation isn't something we should consider
@@ -242,11 +236,7 @@ public class DoNotUseBlockingTaskOperations : XunitDiagnosticAnalyzer
 				if (unfoundSymbols.Count == 0)
 					return true;
 
-#if ROSLYN_LATEST
 				if (childOperation.ChildOperations.Any(c => validateSafeTasks(c)))
-#else
-				if (childOperation.Children.Any(c => validateSafeTasks(c)))
-#endif
 					return true;
 			}
 
@@ -274,18 +264,10 @@ public class DoNotUseBlockingTaskOperations : XunitDiagnosticAnalyzer
 		if (!unfoundSymbols.Contains(operation.Symbol))
 			return;
 
-#if ROSLYN_LATEST
 		if (operation.ChildOperations.FirstOrDefault() is not IVariableInitializerOperation variableInitializerOperation)
-#else
-		if (operation.Children.FirstOrDefault() is not IVariableInitializerOperation variableInitializerOperation)
-#endif
 			return;
 
-#if ROSLYN_LATEST
 		if (variableInitializerOperation.Value.ChildOperations.FirstOrDefault() is not IInvocationOperation variableInitializerInvocationOperation)
-#else
-		if (variableInitializerOperation.Value.Children.FirstOrDefault() is not IInvocationOperation variableInitializerInvocationOperation)
-#endif
 			return;
 
 		if (!FindSymbol(variableInitializerInvocationOperation.TargetMethod, variableInitializerInvocationOperation, taskType, whenAny, xunitContext, out var _))
@@ -315,8 +297,6 @@ public class DoNotUseBlockingTaskOperations : XunitDiagnosticAnalyzer
 			return;
 		}
 
-#if ROSLYN_LATEST
-
 		if (argument.Value is ICollectionExpressionOperation collectionExpression)
 		{
 			foreach (var element in collectionExpression.ChildOperations.OfType<ILocalReferenceOperation>())
@@ -324,7 +304,5 @@ public class DoNotUseBlockingTaskOperations : XunitDiagnosticAnalyzer
 
 			return;
 		}
-
-#endif  // ROSLYN_LATEST
 	}
 }

@@ -20,7 +20,7 @@ public class X1062_TheoryMethodCannotBeGenericTests
 			""";
 
 		await Verify.VerifyAnalyzerNonAot(source);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await Verify.VerifyAnalyzerV3Aot(source, Verify.Diagnostic().WithLocation(0));
 #endif
 	}
@@ -41,7 +41,7 @@ public class X1062_TheoryMethodCannotBeGenericTests
 			""";
 
 		await Verify.VerifyAnalyzerV3NonAot(source);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await Verify.VerifyAnalyzerV3Aot(source, Verify.Diagnostic().WithLocation(0));
 #endif
 	}

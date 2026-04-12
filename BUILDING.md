@@ -61,7 +61,7 @@ The primary projects for editing are:
 * `xunit.analyzers.fixes` (for automated fixes for issues raised in code analysis)
 * `xunit.analyzers.tests` (for unit tests of both above projects)
 
-These are targeting our lowest common denominator for Roslyn (current version 3.11, the version that's supported in Visual Studio 2019 16.11).
+These are targeting our lowest common denominator for Roslyn (current version 4.12, the version that's supported in Visual Studio 2022 17.12).
 
 There are also three projects which build against the latest version of Roslyn:
 
@@ -69,12 +69,12 @@ There are also three projects which build against the latest version of Roslyn:
 * `xunit.analyzers.latest.fixes`
 * `xunit.analyzers.latest.tests`
 
-When running a command line build, we run a matrix of 4 test projects: Roslyn 3.11 vs. latest, and .NET Framework vs. .NET. It's important that you run `./build` (or `./build test`) from Windows before submitting PRs, because some bugs are often found only in one of the four combinations (and Mono cannot run the .NET Framework tests).
+When running a command line build, we run a matrix of 4 test projects: Roslyn 4.12 vs. latest, and .NET Framework vs. .NET. It's important that you run `./build` (or `./build test`) from Windows before submitting PRs, because some bugs are often found only in one of the four combinations (and Mono cannot run the .NET Framework tests).
 
 You will also occasionally see tests which only run in specific environments. Common `#if` statements you may see (or may need to use) include:
 
 * `#if NETFRAMEWORK` (only runs for .NET Framework)
 * `#if NETCOREAPP` (only runs for .NET)
-* `#if ROSLYN_LATEST` (only runs with latest Roslyn, which includes getting analysis test support to C# language > version 9)
+* `#if ROSLYN_LATEST` (only runs with latest Roslyn, for C# language > version 13)
 
 In production code, we try to minimize these when possible, and prefer to fall back to use dynamic runtime environment detection when we can (as we'd like to light up features in newer versions of Roslyn when available). While this isn't always possible, it is generally a goal we try to achieve. In test code, we tend to use these to more frequently to ensure we have complete coverage of features that should be available dynamically (whether they are lit up based on `#if` or by runtime environment detection).

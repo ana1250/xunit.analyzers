@@ -52,7 +52,7 @@ public class X1035_MemberDataShouldReferenceValidMemberTests
 
 		await Verify.VerifyAnalyzerNonAot(source, expectedNonAot);
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		// We don't see issue #1 because xUnit1066 would be reported for the params parameter instead
 		var expectedAot = new[] {
 			Verify.Diagnostic("xUnit1035").WithLocation(0).WithArguments("s", "string"),

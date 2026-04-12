@@ -264,7 +264,7 @@ public class X1007_ClassDataAttributeMustPointAtValidClassTests
 				public void TestMethod4((int x, int y) point) { }
 			}
 			""";
-#if ROSLYN_LATEST && !NETFRAMEWORK  // This is here because otherwise `dotnet format` destroys the multi-line source string
+#if NETCOREAPP  // This is here because otherwise `dotnet format` destroys the multi-line source string
 		var expectedV3 = new[] {
 			Verify.Diagnostic("xUnit1007").WithLocation(0).WithArguments("DataClass_Abstract", SupportedV3),
 			Verify.Diagnostic("xUnit1007").WithLocation(1).WithArguments("DataClass_NoParameterlessCtor", SupportedV3),

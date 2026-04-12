@@ -96,7 +96,7 @@ public class X2007_AssertIsTypeShouldUseGenericOverloadTypeTests
 
 #endif  // NETCOREAPP
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	[Fact]
 	public async ValueTask StaticAbstractInterfaceMethods()
@@ -130,5 +130,5 @@ public class X2007_AssertIsTypeShouldUseGenericOverloadTypeTests
 		await Verify.VerifyAnalyzer(LanguageVersion.CSharp11, source);
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 }

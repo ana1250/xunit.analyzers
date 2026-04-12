@@ -241,7 +241,7 @@ public sealed class X1047_TheoryDataRowArgumentsShouldBeSerializableTests
 				}
 			}
 			""";
-#if ROSLYN_LATEST && NET8_0_OR_GREATER
+#if NETCOREAPP  // This is here because otherwise `dotnet format` destroys the multi-line source string
 		var expected = new[] {
 			Verify.Diagnostic("xUnit1047").WithLocation(0).WithArguments("defaultValue", "Formattable?"),
 			Verify.Diagnostic("xUnit1047").WithLocation(1).WithArguments("nullValue", "Formattable?"),
@@ -260,8 +260,6 @@ public sealed class X1047_TheoryDataRowArgumentsShouldBeSerializableTests
 
 		await Verify.VerifyAnalyzerV3NonAot(LanguageVersion.CSharp11, source, expected);
 #else
-		// For some reason, 'dotnet format' complains about the indenting of #nullable enable in the source code line
-		// above if the #if statement surrounds the whole method, so we use this "workaround" to do nothing in that case.
 		Assert.NotEqual(string.Empty, source);
 		await Task.Yield();
 #endif

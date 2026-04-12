@@ -270,7 +270,7 @@ public class X3005_AssemblyAttributeImplementationValidationTests
 		else
 			await Verify.VerifyAnalyzerV3NonAot(LanguageVersion.CSharp8, source);
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		source =
 			source
 				.Replace("IXunitTestCollectionFactory", "ICodeGenTestCollectionFactory")

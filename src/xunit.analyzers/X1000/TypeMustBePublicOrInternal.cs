@@ -51,13 +51,11 @@ public class TypeMustBePublicOrInternal() :
 						if (context.SemanticModel.GetTypeInfo(typeOfExpression.Type).Type is INamedTypeSymbol exceptionType)
 							verifyTypeAccessibility(exceptionType, typeOfExpression.GetLocation(), "Exception");
 
-#if ROSLYN_LATEST
 				if (skipExceptions.Expression is CollectionExpressionSyntax collectionSyntax)
 					foreach (var expressionElement in collectionSyntax.Elements.OfType<ExpressionElementSyntax>())
 						if (expressionElement.Expression is TypeOfExpressionSyntax typeOfExpression)
 							if (context.SemanticModel.GetTypeInfo(typeOfExpression.Type).Type is INamedTypeSymbol exceptionType)
 								verifyTypeAccessibility(exceptionType, typeOfExpression.GetLocation(), "Exception");
-#endif
 
 				return;
 			}

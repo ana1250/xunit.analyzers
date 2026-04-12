@@ -11,9 +11,7 @@ public abstract class XunitDiagnosticAnalyzer(params DiagnosticDescriptor[] desc
 	DiagnosticAnalyzer
 {
 	/// <inheritdoc/>
-#pragma warning disable IDE0305  // Cannot convert this due to Roslyn 3.11
-	public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = descriptors.ToImmutableArray();
-#pragma warning restore IDE0305
+	public sealed override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = [.. descriptors];
 
 	/// <summary>
 	/// Analyzes compilation to discover diagnostics.

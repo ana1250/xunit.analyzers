@@ -52,7 +52,7 @@ partial class CSharpVerifier<TAnalyzer>
 		await VerifyCodeFixV3FixAll(languageVersion, before, after, fixerActionKey, diagnostics);
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	/// <summary>
 	/// Verify that "Fix All" correctly applies fixes to all diagnostics in a document.
@@ -99,7 +99,7 @@ partial class CSharpVerifier<TAnalyzer>
 		await VerifyCodeFixV3FixAllAot(languageVersion, before, after, fixerActionKey, diagnostics);
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	/// <summary>
 	/// Verify that "Fix All" correctly applies fixes to all diagnostics in a document.
@@ -205,7 +205,7 @@ partial class CSharpVerifier<TAnalyzer>
 		params DiagnosticResult[] diagnostics)
 	{
 		await VerifyCodeFixV3FixAllNonAot(LanguageVersion.CSharp6, before, after, fixerActionKey, diagnostics);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await VerifyCodeFixV3FixAllAot(LanguageVersion.CSharp6, before, after, fixerActionKey, diagnostics);
 #endif
 	}
@@ -231,12 +231,12 @@ partial class CSharpVerifier<TAnalyzer>
 		params DiagnosticResult[] diagnostics)
 	{
 		await VerifyCodeFixV3FixAllNonAot(languageVersion, before, after, fixerActionKey, diagnostics);
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 		await VerifyCodeFixV3FixAllAot(languageVersion, before, after, fixerActionKey, diagnostics);
 #endif
 	}
 
-#if NETCOREAPP && ROSLYN_LATEST
+#if NETCOREAPP
 
 	/// <summary>
 	/// Verify that "Fix All" correctly applies fixes to all diagnostics in a document.
@@ -289,7 +289,7 @@ partial class CSharpVerifier<TAnalyzer>
 		await testAot.RunAsync();
 	}
 
-#endif  // NETCOREAPP && ROSLYN_LATEST
+#endif  // NETCOREAPP
 
 	/// <summary>
 	/// Verify that "Fix All" correctly applies fixes to all diagnostics in a document.
