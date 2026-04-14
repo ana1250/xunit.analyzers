@@ -56,7 +56,7 @@ public class TheoryDataRowArgumentsShouldBeSerializable : XunitDiagnosticAnalyze
 				if (analyzer.TypeShouldBeIgnored(argumentOperation.Type))
 					continue;
 
-				var serializability = analyzer.AnalayzeSerializability(argumentOperation.Type, xunitContext);
+				var serializability = analyzer.AnalyzeSerializability(argumentOperation.Type, xunitContext);
 
 				if (serializability != Serializability.AlwaysSerializable)
 				{

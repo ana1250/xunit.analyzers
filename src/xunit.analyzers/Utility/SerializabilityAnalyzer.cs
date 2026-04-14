@@ -16,7 +16,7 @@ public sealed class SerializabilityAnalyzer(SerializableTypeSymbols typeSymbols)
 	/// The logic in this method corresponds to the logic in SerializationHelper.IsSerializable
 	/// and SerializationHelper.Serialize.
 	/// </remarks>
-	public Serializability AnalayzeSerializability(
+	public Serializability AnalyzeSerializability(
 		ITypeSymbol type,
 		XunitContext xunitContext)
 	{
@@ -28,7 +28,7 @@ public sealed class SerializabilityAnalyzer(SerializableTypeSymbols typeSymbols)
 			return Serializability.NeverSerializable;
 
 		if (type.TypeKind == TypeKind.Array && type is IArrayTypeSymbol arrayType)
-			return AnalayzeSerializability(arrayType.ElementType, xunitContext);
+			return AnalyzeSerializability(arrayType.ElementType, xunitContext);
 
 		if (typeSymbols.Type.IsAssignableFrom(type))
 			return Serializability.AlwaysSerializable;
