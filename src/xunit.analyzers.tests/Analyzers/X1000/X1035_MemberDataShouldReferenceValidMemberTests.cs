@@ -8,6 +8,7 @@ public class X1035_MemberDataShouldReferenceValidMemberTests
 	public async ValueTask V2_and_V3()
 	{
 		var source = /* lang=c#-test */ """
+			#pragma warning disable xUnit1036
 			#pragma warning disable xUnit1066
 
 			using System;

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 using Verify = CSharpVerifier<Xunit.Analyzers.MemberDataShouldReferenceValidMember>;
 
@@ -19,18 +20,25 @@ public class X1036_MemberDataShouldReferenceValidMemberTests
 				[MemberData(nameof(TestData), new object[] { 1 })]
 				public void TestMethod2(int _) { }
 
-				[MemberData(nameof(TestData), 1, {|#0:2|})]
+				[MemberData(nameof(TestData), [1])]
 				public void TestMethod3(int _) { }
+			
+				[MemberData(nameof(TestData), 1, {|#0:2|})]
+				public void TestMethod11(int _) { }
 
 				[MemberData(nameof(TestData), new object[] { 1, {|#1:2|} })]
-				public void TestMethod4(int _) { }
+				public void TestMethod12(int _) { }
+
+				[MemberData(nameof(TestData), [1, {|#2:2|}])]
+				public void TestMethod13(int _) { }
 			}
 			""";
 		var expected = new[] {
 			Verify.Diagnostic("xUnit1036").WithLocation(0).WithArguments("2"),
 			Verify.Diagnostic("xUnit1036").WithLocation(1).WithArguments("2"),
+			Verify.Diagnostic("xUnit1036").WithLocation(2).WithArguments("2"),
 		};
 
-		await Verify.VerifyAnalyzer(source, expected);
+		await Verify.VerifyAnalyzer(LanguageVersion.CSharp12, source, expected);
 	}
 }

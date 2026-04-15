@@ -235,17 +235,15 @@ public class InlineDataMustMatchTheoryParameters : XunitDiagnosticAnalyzer
 
 		var argumentExpression = attribute.ArgumentList.Arguments.Single().Expression;
 
-		var initializer = argumentExpression.Kind() switch
+		var expressions = argumentExpression switch
 		{
-			SyntaxKind.ArrayCreationExpression => ((ArrayCreationExpressionSyntax)argumentExpression).Initializer,
-			SyntaxKind.ImplicitArrayCreationExpression => ((ImplicitArrayCreationExpressionSyntax)argumentExpression).Initializer,
+			ArrayCreationExpressionSyntax array => array.Initializer?.Expressions,
+			ImplicitArrayCreationExpressionSyntax implicitArray => implicitArray.Initializer.Expressions,
+			CollectionExpressionSyntax collection => collection.Elements.OfType<ExpressionElementSyntax>().Select(e => e.Expression),
 			_ => null,
 		};
 
-		if (initializer is null)
-			return null;
-
-		return [.. initializer.Expressions];
+		return expressions is null ? null : [.. expressions];
 	}
 
 	public enum ParameterArrayStyleType

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
@@ -346,20 +345,21 @@ public class MemberDataShouldReferenceValidMember() :
 		var argumentExpression = arguments.Single().Expression;
 
 		var kind = argumentExpression.Kind();
-		var initializer = kind switch
+		var expressions = argumentExpression switch
 		{
-			SyntaxKind.ArrayCreationExpression => ((ArrayCreationExpressionSyntax)argumentExpression).Initializer,
-			SyntaxKind.ImplicitArrayCreationExpression => ((ImplicitArrayCreationExpressionSyntax)argumentExpression).Initializer,
+			ArrayCreationExpressionSyntax array => array.Initializer?.Expressions,
+			ImplicitArrayCreationExpressionSyntax implicitArray => implicitArray.Initializer.Expressions,
+			CollectionExpressionSyntax collection => collection.Elements.OfType<ExpressionElementSyntax>().Select(e => e.Expression),
 			_ => null,
 		};
 
-		if (initializer is null)
+		if (expressions is null)
 			return [argumentExpression];
 
 		// In the special case where the argument is an object[], treat like params
 		var type = semanticModel.GetTypeInfo(argumentExpression).Type;
-		if (type is IArrayTypeSymbol arrayType && arrayType.ElementType.SpecialType == SpecialType.System_Object)
-			return [.. initializer.Expressions];
+		if (argumentExpression is CollectionExpressionSyntax || (type is IArrayTypeSymbol arrayType && arrayType.ElementType.SpecialType == SpecialType.System_Object))
+			return [.. expressions];
 
 		return [argumentExpression];
 	}
@@ -741,52 +741,6 @@ public class MemberDataShouldReferenceValidMember() :
 				memberSymbol.ContainingType.ToDisplayString()
 			)
 		);
-	}
-
-	/// <summary>
-	/// Resolve declared base type and find the first base class that implements IEnumerable
-	/// (e.g. "ValidExample" from "class SubtypeValidExample : ValidExample {}")
-	/// </summary>
-	static ITypeSymbol? ResolveDeclaredBaseTypeFromSyntax(
-		ITypeSymbol type,
-		Compilation compilation)
-	{
-		if (type is null)
-			return null;
-
-		// Look through source declarations for an explicit base type in the syntax.
-		foreach (var declaringReference in type.DeclaringSyntaxReferences)
-		{
-			var syntax = declaringReference.GetSyntax();
-			if (syntax is ClassDeclarationSyntax cls && cls.BaseList is not null && cls.BaseList.Types.Count > 0)
-			{
-				var baseTypeSyntax = cls.BaseList.Types.First().Type;
-				var baseTypeName = baseTypeSyntax.ToString(); // may be qualified
-
-				// Try direct metadata lookup first (works for namespace-qualified names)
-				var byMetadata = compilation.GetTypeByMetadataName(baseTypeName);
-				if (byMetadata is not null)
-					return byMetadata;
-
-				// Fallback: search symbols by the simple name and try to match fully-qualified textual form.
-				var simpleName = baseTypeName.Split('.').Last();
-				var candidates =
-					compilation
-						.GetSymbolsWithName(n => n == simpleName, SymbolFilter.Type)
-						.OfType<INamedTypeSymbol>()
-						.ToList();
-
-				// Prefer exact textual match of declared name (handles namespace-qualified baseTypeSyntax)
-				var exact = candidates.FirstOrDefault(c => string.Equals(c.ToDisplayString(), baseTypeName, StringComparison.Ordinal));
-				if (exact is not null)
-					return exact;
-
-				// Otherwise return the first candidate in the current compilation with the simple name
-				return candidates.FirstOrDefault();
-			}
-		}
-
-		return null;
 	}
 
 	static bool ShouldSuppressX1015BecauseAllDerivedConcreteTypesHaveMember(
