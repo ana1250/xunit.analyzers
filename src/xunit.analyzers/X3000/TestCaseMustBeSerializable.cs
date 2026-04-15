@@ -5,21 +5,20 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace Xunit.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class TestCaseMustBeSerializable : XunitDiagnosticAnalyzer
+public class TestCaseMustBeSerializable() :
+	XunitV3DiagnosticAnalyzer(
+		Descriptors.X3006_TestCaseImplementationMustBeSerializable,
+		Descriptors.X3007_TestCaseImplementationMightNotBeSerializable)
 {
-	public TestCaseMustBeSerializable() :
-		base(
-			Descriptors.X3006_TestCaseImplementationsMustBeSerializable,
-			Descriptors.X3007_TestCaseImplementationsMightNotBeSerializable
-		)
-	{ }
-
 	public override void AnalyzeCompilation(
 		CompilationStartAnalysisContext context,
 		XunitContext xunitContext)
 	{
 		Guard.ArgumentNotNull(context);
 		Guard.ArgumentNotNull(xunitContext);
+
+		if (SerializableTypeSymbols.Create(context.Compilation, xunitContext) is not SerializableTypeSymbols typeSymbols)
+			return;
 
 		var iTestCaseType = xunitContext.Common.ITestCaseType;
 		if (iTestCaseType is null)
@@ -33,34 +32,20 @@ public class TestCaseMustBeSerializable : XunitDiagnosticAnalyzer
 				return;
 			if (namedType.IsAbstract)
 				return;
-
 			if (!iTestCaseType.IsAssignableFrom(namedType))
 				return;
-
-			// Types that implement IXunitSerializable
-			if (xunitContext.Common.IXunitSerializableType?.IsAssignableFrom(namedType) == true)
+			if (typeSymbols.IXunitSerializable.IsAssignableFrom(namedType) || typeSymbols.TypesWithCustomSerializers.Any(t => t.IsAssignableFrom(namedType)))
 				return;
-
-			// Types that decorate with [JsonTypeID]
-			if (xunitContext.V3Core?.JsonTypeIDAttributeType is INamedTypeSymbol jsonTypeIDAttributeType)
-				if (namedType.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, jsonTypeIDAttributeType)))
-					return;
-
-			var iXunitSerializableDisplay =
-				xunitContext.Common.IXunitSerializableType?.ToDisplayString()
-				?? "IXunitSerializable";
-
-			var isDefinitelyNotSerializable = namedType.IsSealed;
 
 			context.ReportDiagnostic(
 				Diagnostic.Create(
-					isDefinitelyNotSerializable
-						? Descriptors.X3006_TestCaseImplementationsMustBeSerializable
-						: Descriptors.X3007_TestCaseImplementationsMightNotBeSerializable,
+					namedType.IsSealed
+						? Descriptors.X3006_TestCaseImplementationMustBeSerializable
+						: Descriptors.X3007_TestCaseImplementationMightNotBeSerializable,
 					namedType.Locations.First(),
 					namedType.Name,
 					iTestCaseType.ToDisplayString(),
-					iXunitSerializableDisplay
+					xunitContext.Common.IXunitSerializableType?.ToDisplayString() ?? "IXunitSerializable"
 				)
 			);
 		}, SymbolKind.NamedType);

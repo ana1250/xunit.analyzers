@@ -60,22 +60,22 @@ public static partial class Descriptors
 			"Type '{0}' must have a non-obsolete public constructor: public {0}({1})"
 		);
 
-	public static DiagnosticDescriptor X3006_TestCaseImplementationsMustBeSerializable { get; } =
+	public static DiagnosticDescriptor X3006_TestCaseImplementationMustBeSerializable { get; } =
 		Diagnostic(
 			"xUnit3006",
-			"Test case implementations must be serializable",
+			"Test case implementation must be serializable",
 			Extensibility,
-			Warning,
-			"Class '{0}' implements '{1}' but is not serializable. Test cases must be serializable to support test discovery and execution. Implement '{2}', decorate with '[JsonTypeID]', or register an external IXunitSerializer."
+			Error,
+			"Class '{0}' implements '{1}' but is not serializable. Test cases must be serializable to support test discovery and execution. Implement '{2}' or register an external IXunitSerializer."
 		);
 
-	public static DiagnosticDescriptor X3007_TestCaseImplementationsMightNotBeSerializable { get; } =
+	public static DiagnosticDescriptor X3007_TestCaseImplementationMightNotBeSerializable { get; } =
 		Diagnostic(
 			"xUnit3007",
-			"Test case implementations might not be serializable",
+			"Test case implementation might not be serializable",
 			Extensibility,
 			Warning,
-			"Class '{0}' implements '{1}' but might not be serializable. Test cases must be serializable to support test discovery and execution. Consider implementing '{2}', decorating with '[JsonTypeID]', or registering an external IXunitSerializer."
+			"Class '{0}' implements '{1}' but might not be serializable. Test cases must be serializable to support test discovery and execution. Consider implementing '{2}' or registering an external IXunitSerializer."
 		);
 
 	// Placeholder for rule X3008
