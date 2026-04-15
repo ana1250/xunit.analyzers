@@ -60,9 +60,23 @@ public static partial class Descriptors
 			"Type '{0}' must have a non-obsolete public constructor: public {0}({1})"
 		);
 
-	// Placeholder for rule X3006
+	public static DiagnosticDescriptor X3006_TestCaseImplementationMustBeSerializable { get; } =
+		Diagnostic(
+			"xUnit3006",
+			"Test case implementation must be serializable",
+			Extensibility,
+			Error,
+			"Class '{0}' implements '{1}' but is not serializable. Test cases must be serializable to support test discovery and execution. Implement '{2}' or register an external IXunitSerializer."
+		);
 
-	// Placeholder for rule X3007
+	public static DiagnosticDescriptor X3007_TestCaseImplementationMightNotBeSerializable { get; } =
+		Diagnostic(
+			"xUnit3007",
+			"Test case implementation might not be serializable",
+			Extensibility,
+			Warning,
+			"Class '{0}' implements '{1}' but might not be serializable. Test cases must be serializable to support test discovery and execution. Consider implementing '{2}' or registering an external IXunitSerializer."
+		);
 
 	// Placeholder for rule X3008
 

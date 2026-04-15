@@ -68,7 +68,7 @@ public class TheoryDataTypeArgumentsShouldBeSerializable : XunitDiagnosticAnalyz
 					if (analyzer.TypeShouldBeIgnored(type))
 						continue;
 
-					var serializability = analyzer.AnalayzeSerializability(type, xunitContext);
+					var serializability = analyzer.AnalyzeSerializability(type, xunitContext);
 
 					if (serializability != Serializability.AlwaysSerializable)
 						context.ReportDiagnostic(
