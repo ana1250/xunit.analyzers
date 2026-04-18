@@ -402,4 +402,44 @@ public partial class CSharpVerifier<TAnalyzer>
 		test.TestState.ExpectedDiagnostics.AddRange(diagnostics);
 		return test.RunAsync();
 	}
+
+	/// <summary>
+	/// Runs code for analysis, against xUnit.net v3, using C# 6, with compiler
+	/// diagnostics verification disabled.
+	/// </summary>
+	/// <param name="compilerDiagnostics">The level of compiler diagnostics to verify</param>
+	/// <param name="source">The code to verify</param>
+	/// <param name="diagnostics">The expected diagnostics (pass none for code that
+	/// should not trigger)</param>
+	public static Task VerifyAnalyzerV3NonAot(
+		CompilerDiagnostics compilerDiagnostics,
+		string source,
+		params DiagnosticResult[] diagnostics) =>
+			VerifyAnalyzerV3NonAot(LanguageVersion.CSharp6, compilerDiagnostics, [source], diagnostics);
+
+	/// <summary>
+	/// Runs code for analysis, against xUnit.net v3, using the provided version of C#, with
+	/// the specified level of compiler diagnostics verification.
+	/// </summary>
+	/// <param name="languageVersion">The language version to compile with</param>
+	/// <param name="compilerDiagnostics">The level of compiler diagnostics to verify</param>
+	/// <param name="sources">The code to verify</param>
+	/// <param name="diagnostics">The expected diagnostics (pass none for code that
+	/// should not trigger)</param>
+	public static Task VerifyAnalyzerV3NonAot(
+		LanguageVersion languageVersion,
+		CompilerDiagnostics compilerDiagnostics,
+		string[] sources,
+		params DiagnosticResult[] diagnostics)
+	{
+		var test = new TestV3(languageVersion);
+
+		foreach (var source in sources)
+			test.TestState.Sources.Add(source);
+
+		test.CompilerDiagnostics = compilerDiagnostics;
+
+		test.TestState.ExpectedDiagnostics.AddRange(diagnostics);
+		return test.RunAsync();
+	}
 }
